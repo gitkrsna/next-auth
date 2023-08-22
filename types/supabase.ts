@@ -1082,7 +1082,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      role: "admin" | "staff" | "student" | "parent"
     }
     CompositeTypes: {
       [_ in never]: never
