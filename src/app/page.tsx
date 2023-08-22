@@ -1,3 +1,4 @@
+import { ProfileForm } from '@/components/student/AddStudent'
 import AuthForm from './auth-form'
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       </div>
       <div className="col-6 auth-widget">
         <AuthForm />
+        {/* <ProfileForm /> */}
       </div>
     </div>
   )
