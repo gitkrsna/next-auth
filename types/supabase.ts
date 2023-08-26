@@ -1046,7 +1046,7 @@ export interface Database {
           last_name: string | null
           password: string
           phone_number: string | null
-          role: string
+          role: Database["public"]["Enums"]["role"]
         }
         Insert: {
           address?: string | null
@@ -1058,7 +1058,7 @@ export interface Database {
           last_name?: string | null
           password: string
           phone_number?: string | null
-          role: string
+          role: Database["public"]["Enums"]["role"]
         }
         Update: {
           address?: string | null
@@ -1070,7 +1070,7 @@ export interface Database {
           last_name?: string | null
           password?: string
           phone_number?: string | null
-          role?: string
+          role?: Database["public"]["Enums"]["role"]
         }
         Relationships: []
       }
