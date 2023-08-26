@@ -1,8 +1,9 @@
 
-import { ProfileForm } from '@/components/student/AddStudent'
+import { ProfileForm } from '@/components/app-ui/student/AddStudent'
 import AuthForm from './auth-form'
 import { NavMenu, NavMenuItem } from '@/components/shared-ui/NavMenu'
-import AdminNav from '@/components/admin/AdminNav'
+import AdminNav from '@/components/app-ui/admin/AdminNav'
+import StudentNav from '@/components/app-ui/student/StudentNav'
 
 export default function Home() {
 
@@ -22,5 +23,6 @@ export default function Home() {
     // </div>
 
     <AdminNav />
+    // <StudentNav />
   )
 }
