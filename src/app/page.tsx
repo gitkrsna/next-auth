@@ -4,6 +4,8 @@ import AuthForm from './auth-form'
 import { NavMenu, NavMenuItem } from '@/components/shared-ui/NavMenu'
 import AdminNav from '@/components/app-ui/admin/AdminNav'
 import StudentNav from '@/components/app-ui/student/StudentNav'
+import ParentNav from '@/components/app-ui/parent/ParentNav'
+import StaffNav from '@/components/app-ui/staff/StaffNav'
 
 export default function Home() {
 
@@ -22,7 +24,11 @@ export default function Home() {
     //   </div>
     // </div>
 
-    <AdminNav />
-    // <StudentNav />
+    <>
+      <StaffNav />
+      {/* <ParentNav /> */}
+      {/* <AdminNav />
+      <StudentNav /> */}
+    </>
   )
 }
