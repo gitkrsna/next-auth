@@ -2,36 +2,7 @@
 import { ProfileForm } from '@/components/student/AddStudent'
 import AuthForm from './auth-form'
 import { NavMenu, NavMenuItem } from '@/components/shared-ui/NavMenu'
-
-const menuItems: NavMenuItem[] = [
-  {
-    trigger: "Getting started",
-    content: [
-      {
-        title: "Alert Dialog",
-        href: "/docs/primitives/alert-dialog",
-        description:
-          "A modal dialog that interrupts the user with important content and expects a response.",
-      },
-      {
-        title: "Hover Card",
-        href: "/docs/primitives/hover-card",
-        description:
-          "For sighted users to preview content available behind a link.",
-      },
-      {
-        title: "Progress",
-        href: "/docs/primitives/progress",
-        description:
-          "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-      }]
-  },
-  {
-    trigger: "Documentation",
-    content: "/docs"
-  }
-
-]
+import AdminNav from '@/components/admin/AdminNav'
 
 export default function Home() {
 
@@ -50,6 +21,6 @@ export default function Home() {
     //   </div>
     // </div>
 
-    <NavMenu navMenuItems={menuItems} />
+    <AdminNav />
   )
 }
