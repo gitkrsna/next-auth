@@ -6,6 +6,7 @@ import AdminNav from '@/components/app-ui/admin/AdminNav'
 import StudentNav from '@/components/app-ui/student/StudentNav'
 import ParentNav from '@/components/app-ui/parent/ParentNav'
 import StaffNav from '@/components/app-ui/staff/StaffNav'
+import StudentTable from '@/components/app-ui/student/StudentTable'
 
 export default function Home() {
 
@@ -25,10 +26,13 @@ export default function Home() {
     // </div>
 
     <>
-      <StaffNav />
+      {/* <AuthForm /> */}
+      {/* <StaffNav /> */}
+      {/* <ProfileForm />
+      <StudentTable /> */}
       {/* <ParentNav /> */}
-      {/* <AdminNav />
-      <StudentNav /> */}
+      <AdminNav />
+      {/* <StudentNav /> */}
     </>
   )
 }

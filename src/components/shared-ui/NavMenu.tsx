@@ -26,7 +26,7 @@ export function NavMenu({ navMenuItems }: { navMenuItems: NavMenuItem[] }) {
                     return <NavigationMenuItem key={trigger}>
                         {Array.isArray(content) ? <>
                             <NavigationMenuTrigger>{trigger}</NavigationMenuTrigger>
-                            <NavigationMenuContent>
+                            <NavigationMenuContent className='absolute top-0 left-0 animate-ease duration-250'>
                                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                                     {(content ?? []).map(({ title, href, description }) => (
                                         <ListItem
