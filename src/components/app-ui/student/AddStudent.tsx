@@ -15,11 +15,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form'
 import { Button } from '../../ui/button'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Database } from 'types/supabase'
 
 const formSchema = z.object({
     username: z.string().min(2, {
         message: "Username must be at least 2 characters.",
     }),
+    phone: z.string(),
+    email: z.string().email("Please enter a valid email id"),
+    password: z.string()
 })
 
 export function ProfileForm() {
@@ -28,14 +33,17 @@ export function ProfileForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             username: "",
+            phone: "",
+            email: "",
+            password: ""
         },
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const supabase = createClientComponentClient<Database>()
+        let { status } = await supabase.from('loginTable').insert(values)
+        status === 201 && alert("User created!")
     }
 
     return (
@@ -48,10 +56,58 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="username" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This is your public display name.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Phone</FormLabel>
+                            <FormControl>
+                                <Input placeholder="phone" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your phone number.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="email" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your email.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input type='password' placeholder="password" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your login password.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
