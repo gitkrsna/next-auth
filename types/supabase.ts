@@ -673,33 +673,6 @@ export interface Database {
           }
         ]
       }
-      loginTable: {
-        Row: {
-          created_at: string
-          email: string | null
-          id: number
-          password: string | null
-          phone: string | null
-          username: string | null
-        }
-        Insert: {
-          created_at?: string
-          email?: string | null
-          id?: number
-          password?: string | null
-          phone?: string | null
-          username?: string | null
-        }
-        Update: {
-          created_at?: string
-          email?: string | null
-          id?: number
-          password?: string | null
-          phone?: string | null
-          username?: string | null
-        }
-        Relationships: []
-      }
       notifications: {
         Row: {
           created_at: string | null
