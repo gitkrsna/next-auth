@@ -117,7 +117,7 @@ export function Courses() {
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <AddCourse />
+                <AddCourse refreshCourses={fetchCourses} />
             </div>
             <div className="rounded-md border">
                 <Table>
