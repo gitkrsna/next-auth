@@ -37,6 +37,7 @@ const formSchema = z.object({
 
 const AddCourse = () => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+    const [open, setOpen] = useState(false);
     const { toast } = useToast();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -52,6 +53,7 @@ const AddCourse = () => {
         let { status } = await supabase.from('courses').insert(values)
         status === 201 ? showSuccess("Course created successfully") : showError();
         setIsSubmitting(false)
+        setOpen(false)
     }
 
     function showSuccess(msg: string) {
@@ -68,7 +70,7 @@ const AddCourse = () => {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild><Button className="ml-5">Add Course  <PlusIcon className="ml-2 h-4 w-4" /></Button></DialogTrigger>
             <DialogContent>
                 <Form {...form}>
