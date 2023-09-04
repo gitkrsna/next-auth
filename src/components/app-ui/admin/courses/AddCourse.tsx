@@ -68,11 +68,12 @@ const AddCourse = ({ isEditing = false, initialValues = {
         if (isEditing) {
             let { status } = await supabase.from('courses').update(values).eq("id", values.id)
             status === 204 ? showSuccess("Course updated successfully") : showError();
-            refreshCourses?.()
         } else {
-            let { status } = await supabase.from('courses').insert(values)
+            const { name, description } = values
+            let { status } = await supabase.from('courses').insert({ name, description })
             status === 201 ? showSuccess("Course created successfully") : showError();
         }
+        refreshCourses?.()
         setIsSubmitting(false)
         setOpen(false)
     }
