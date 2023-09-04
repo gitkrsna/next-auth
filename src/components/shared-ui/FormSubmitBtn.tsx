@@ -8,7 +8,7 @@ interface FormSubmitBtnProps {
 const FormSubmitBtn = ({ isSubmitting }: FormSubmitBtnProps) => {
     return (
         <div className='flex justify-end'> <Button disabled={isSubmitting} type="submit">
-            Submit
+            Save
             {isSubmitting && <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />}  </Button></div>
     )
 }
