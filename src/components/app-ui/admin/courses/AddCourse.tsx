@@ -29,6 +29,7 @@ import { useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
 import * as z from "zod"
 import { Course } from './types'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -91,7 +92,7 @@ const AddCourse = ({ isEditing = false, initialValues = {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>{isEditing ? <div>Edit</div> : <Button className="ml-5">Add Course  <PlusIcon className="ml-2 h-4 w-4" /></Button>}</DialogTrigger>
+            <DialogTrigger asChild>{isEditing ? <DropdownMenuItem onSelect={(e) => e.preventDefault()} >Edit</DropdownMenuItem> : <Button className="ml-5">Add Course  <PlusIcon className="ml-2 h-4 w-4" /></Button>}</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{isEditing ? "Edit" : "Add"} course</DialogTitle>
