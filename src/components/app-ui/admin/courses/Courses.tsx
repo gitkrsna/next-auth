@@ -1,13 +1,9 @@
 "use client"
 
-import * as React from "react"
 import {
-    CaretSortIcon,
-    ChevronDownIcon,
-    DotsHorizontalIcon,
+    ChevronDownIcon
 } from "@radix-ui/react-icons"
 import {
-    ColumnDef,
     ColumnFiltersState,
     SortingState,
     VisibilityState,
@@ -16,19 +12,16 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,
+    useReactTable
 } from "@tanstack/react-table"
+import * as React from "react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
@@ -39,76 +32,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import AddCourse from './AddCourse'
-import { Database } from 'types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
-type Course = Database['public']['Tables']['courses']['Row']
-
-export const columns: ColumnDef<Course>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected()}
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Name
-                    <CaretSortIcon className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("name")}</div>
-        ),
-    },
-    {
-        accessorKey: "description",
-        header: "Description",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <DotsHorizontalIcon className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
-        },
-    },
-]
+import { Database } from 'types/supabase'
+import AddCourse from './AddCourse'
+import { Course } from './types'
+import useCourseColumns from './useCourseColumns'
 
 export function Courses() {
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -120,12 +48,15 @@ export function Courses() {
     const [rowSelection, setRowSelection] = React.useState({})
     const [courses, setCourses] = React.useState<Course[] | null>([]);
 
+    const fetchCourses = async () => {
+        const supabase = createClientComponentClient<Database>()
+        const { error, data } = await supabase.from('courses').select('*')
+        !error && setCourses(data)
+    }
+
+    const columns = useCourseColumns({ refreshCourses: fetchCourses })
+
     React.useEffect(() => {
-        const fetchCourses = async () => {
-            const supabase = createClientComponentClient<Database>()
-            const { error, data } = await supabase.from('courses').select('*')
-            !error && setCourses(data)
-        }
         fetchCourses();
     }, [])
 

@@ -19,12 +19,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { useToast } from '@/components/ui/use-toast'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PlusIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { PlusIcon } from '@radix-ui/react-icons'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
 import * as z from "zod"
+import { Course } from './types'
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -32,26 +33,42 @@ const formSchema = z.object({
     }),
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
-    })
+    }),
+    id: z.string(),
+    created_at: z.string(),
 })
 
-const AddCourse = () => {
+interface AddCourseProps {
+    isEditing?: boolean,
+    initialValues?: Course,
+    refreshCourses?: () => void
+}
+
+const AddCourse = ({ isEditing = false, initialValues = {
+    id: "",
+    created_at: "",
+    name: "",
+    description: "",
+}, refreshCourses }: AddCourseProps) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [open, setOpen] = useState(false);
     const { toast } = useToast();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-        },
+        defaultValues: initialValues as any,
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true)
         const supabase = createClientComponentClient<Database>()
-        let { status } = await supabase.from('courses').insert(values)
-        status === 201 ? showSuccess("Course created successfully") : showError();
+        if (isEditing) {
+            let { status } = await supabase.from('courses').update(values).eq("id", values.id)
+            status === 204 ? showSuccess("Course updated successfully") : showError();
+            refreshCourses?.()
+        } else {
+            let { status } = await supabase.from('courses').insert(values)
+            status === 201 ? showSuccess("Course created successfully") : showError();
+        }
         setIsSubmitting(false)
         setOpen(false)
     }
@@ -71,7 +88,7 @@ const AddCourse = () => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button className="ml-5">Add Course  <PlusIcon className="ml-2 h-4 w-4" /></Button></DialogTrigger>
+            <DialogTrigger asChild>{isEditing ? <div>Edit</div> : <Button className="ml-5">Add Course  <PlusIcon className="ml-2 h-4 w-4" /></Button>}</DialogTrigger>
             <DialogContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
