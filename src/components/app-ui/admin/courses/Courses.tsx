@@ -35,7 +35,7 @@ import {
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from 'types/supabase'
 import AddCourse from './AddCourse'
-import { Course } from './types'
+import { Course } from 'types/tableTypes'
 import useCourseColumns from './useCourseColumns'
 import { useToast } from '@/components/ui/use-toast'
 

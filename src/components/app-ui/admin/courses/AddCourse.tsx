@@ -28,7 +28,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
 import * as z from "zod"
-import { Course } from './types'
+import { Course } from 'types/tableTypes'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 const formSchema = z.object({

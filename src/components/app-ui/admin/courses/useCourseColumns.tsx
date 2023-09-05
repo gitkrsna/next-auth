@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import AddCourse from './AddCourse'
-import { Course } from './types'
+import { Course } from 'types/tableTypes'
 import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal'
 
 
