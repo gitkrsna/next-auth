@@ -32,8 +32,8 @@ const DeleteConfimModal = ({ title, description, onConfirm }: DeleteConfimModalP
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
+                <DialogDescription>{description}</DialogDescription>
                 <div className='flex justify-end'>
                     <DeleteBtn onClick={confirmClickHandler} />
                 </div>
