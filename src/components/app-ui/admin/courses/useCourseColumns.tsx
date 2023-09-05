@@ -82,7 +82,7 @@ const useCourseColumns = ({ refreshCourses, deleteCourse }: { refreshCourses: ()
                             <DropdownMenuItem asChild>
                                 <AddCourse refreshCourses={refreshCourses} isEditing={true} initialValues={row.original} /></DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <DeleteConfimModal title='Delete course' description='Are you sure, you want to delete this course?' onConfirm={() => deleteCourse(row.original)} />
+                                <DeleteConfimModal title='Delete course' description={`Are you sure, you want to delete course '${row.original.name}' ?`} onConfirm={() => deleteCourse(row.original)} />
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
