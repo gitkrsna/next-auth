@@ -19,9 +19,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import AddCourse from './AddCourse'
 import { Course } from './types'
+import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal'
 
 
-const useCourseColumns = ({ refreshCourses }: { refreshCourses: () => void }) => {
+const useCourseColumns = ({ refreshCourses, deleteCourse }: { refreshCourses: () => void, deleteCourse: (record: Course) => Promise<void> }) => {
     const columns: ColumnDef<Course>[] = [
         {
             id: "select",
@@ -80,7 +81,9 @@ const useCourseColumns = ({ refreshCourses }: { refreshCourses: () => void }) =>
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem asChild>
                                 <AddCourse refreshCourses={refreshCourses} isEditing={true} initialValues={row.original} /></DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <DeleteConfimModal title='Delete course' description='Are you sure, you want to delete this course?' onConfirm={() => deleteCourse(row.original)} />
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )

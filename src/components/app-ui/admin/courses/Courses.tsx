@@ -37,8 +37,10 @@ import { Database } from 'types/supabase'
 import AddCourse from './AddCourse'
 import { Course } from './types'
 import useCourseColumns from './useCourseColumns'
+import { useToast } from '@/components/ui/use-toast'
 
 export function Courses() {
+    const { toast } = useToast()
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -54,7 +56,23 @@ export function Courses() {
         !error && setCourses(data)
     }
 
-    const columns = useCourseColumns({ refreshCourses: fetchCourses })
+    const deleteCourse = async (record: Course) => {
+        const supabase = createClientComponentClient<Database>();
+        const { error } = await supabase.from('courses').delete().eq("id", record.id)
+        if (!error) {
+            toast({
+                description: "Course deleted successfully"
+            })
+            fetchCourses();
+        } else {
+            toast({
+                variant: "destructive",
+                description: "Something went wrong, please try again later"
+            })
+        }
+    }
+
+    const columns = useCourseColumns({ refreshCourses: fetchCourses, deleteCourse })
 
     React.useEffect(() => {
         fetchCourses();
