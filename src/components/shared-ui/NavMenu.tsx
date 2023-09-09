@@ -17,10 +17,10 @@ import { Url } from 'next/dist/shared/lib/router/router'
 
 export interface NavMenuItem { trigger: string, content?: { title: string; href: string; description: string }[] | Url }
 
-export function NavMenu({ navMenuItems }: { navMenuItems: NavMenuItem[] }) {
+export function NavMenu({ defaultValue, navMenuItems }: { defaultValue?: string, navMenuItems: NavMenuItem[] }) {
 
     return (
-        <NavigationMenu>
+        <NavigationMenu orientation="vertical" defaultValue={defaultValue}>
             <NavigationMenuList>
                 {(navMenuItems ?? []).map(({ trigger, content }) => {
                     return <NavigationMenuItem key={trigger}>
