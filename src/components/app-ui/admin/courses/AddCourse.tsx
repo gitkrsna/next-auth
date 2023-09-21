@@ -76,6 +76,7 @@ const AddCourse = ({ isEditing = false, initialValues = {
         refreshCourses?.()
         setIsSubmitting(false)
         setOpen(false)
+        form.reset()
     }
 
     function showSuccess(msg: string) {

@@ -75,6 +75,7 @@ const AddSubject = ({ isEditing = false, initialValues = {
         refreshSubjects?.()
         setIsSubmitting(false)
         setOpen(false)
+        form.reset()
     }
 
     function showSuccess(msg: string) {
