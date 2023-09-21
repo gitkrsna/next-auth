@@ -24,7 +24,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
 import * as z from "zod"
@@ -62,6 +62,10 @@ const AddCourse = ({ isEditing = false, initialValues = {
         defaultValues: initialValues as any,
     })
 
+    useEffect(() => {
+        open && form.reset()
+    }, [open, form])
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true)
         const supabase = createClientComponentClient<Database>()
@@ -76,7 +80,6 @@ const AddCourse = ({ isEditing = false, initialValues = {
         refreshCourses?.()
         setIsSubmitting(false)
         setOpen(false)
-        form.reset()
     }
 
     function showSuccess(msg: string) {
