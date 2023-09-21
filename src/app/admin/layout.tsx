@@ -20,6 +20,10 @@ const layout = ({ children }: {
         {
             "trigger": "Time Table",
             "content": "/admin/timetable-management",
+        },
+        {
+            "trigger": "Teacher",
+            "content": "/admin/teacher-management",
         }]
 
     return (
