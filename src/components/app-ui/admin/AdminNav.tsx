@@ -5,11 +5,7 @@ const menuItems: NavMenuItem[] = [
   {
     "trigger": "Administration",
     "content": [
-      {
-        "title": "User Management",
-        "href": "/admin/user-management",
-        "description": "Manage users, roles, and permissions within the system."
-      },
+
       {
         "title": "Class Management",
         "href": "/admin/class-management",
@@ -49,11 +45,6 @@ const menuItems: NavMenuItem[] = [
         "title": "Exam Management",
         "href": "/admin/staff/exam-management",
         "description": "Manage exams, schedules, and grading."
-      },
-      {
-        "title": "Financial Transactions",
-        "href": "/admin/staff/financial-transactions",
-        "description": "Manage financial transactions, expenses, and reimbursements."
       }
     ]
   },
@@ -79,41 +70,6 @@ const menuItems: NavMenuItem[] = [
         "title": "Library Access",
         "href": "/admin/students/library-access",
         "description": "Manage library access and book borrowing for students."
-      },
-      {
-        "title": "Student Fees",
-        "href": "/admin/students/fees",
-        "description": "Manage student fees, payments, and financial records."
-      }
-    ]
-  },
-  {
-    "trigger": "Reports and Communication",
-    "content": [
-      {
-        "title": "Reports",
-        "href": "/admin/reports",
-        "description": "Generate and view various reports for school management."
-      },
-      {
-        "title": "Communication",
-        "href": "/admin/communication",
-        "description": "Facilitate communication among stakeholders and administrators."
-      }
-    ]
-  },
-  {
-    "trigger": "Library and Events",
-    "content": [
-      {
-        "title": "Library Management",
-        "href": "/admin/library-management",
-        "description": "Manage the library, books, loans, and library-related activities."
-      },
-      {
-        "title": "Events and Announcements",
-        "href": "/admin/events-announcements",
-        "description": "Create and manage events, announcements, and school activities."
       }
     ]
   }
