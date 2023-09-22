@@ -225,7 +225,7 @@ export interface Database {
           {
             foreignKeyName: "classes_teacher_id_fkey"
             columns: ["teacher_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -259,7 +259,7 @@ export interface Database {
           {
             foreignKeyName: "complaints_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -466,7 +466,7 @@ export interface Database {
           {
             foreignKeyName: "financialtransactions_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -702,7 +702,7 @@ export interface Database {
           {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -727,7 +727,7 @@ export interface Database {
           {
             foreignKeyName: "parents_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -794,13 +794,13 @@ export interface Database {
           {
             foreignKeyName: "students_parent_id_fkey"
             columns: ["parent_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "students_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -823,7 +823,7 @@ export interface Database {
         }
         Relationships: []
       }
-      teachers: {
+      teacher: {
         Row: {
           created_at: string | null
           employee_id: string | null
@@ -850,9 +850,9 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "teachers_user_id_fkey"
+            foreignKeyName: "teacher_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
@@ -904,7 +904,7 @@ export interface Database {
           {
             foreignKeyName: "timetable_teacher_id_fkey"
             columns: ["teacher_id"]
-            referencedRelation: "teachers"
+            referencedRelation: "teacher"
             referencedColumns: ["id"]
           }
         ]
@@ -956,7 +956,7 @@ export interface Database {
           {
             foreignKeyName: "timetablechanges_teacher_id_fkey"
             columns: ["teacher_id"]
-            referencedRelation: "teachers"
+            referencedRelation: "teacher"
             referencedColumns: ["id"]
           }
         ]
@@ -1030,12 +1030,12 @@ export interface Database {
           {
             foreignKeyName: "transportroutes_driver_id_fkey"
             columns: ["driver_id"]
-            referencedRelation: "users"
+            referencedRelation: "user"
             referencedColumns: ["id"]
           }
         ]
       }
-      users: {
+      user: {
         Row: {
           address: string | null
           created_at: string | null
