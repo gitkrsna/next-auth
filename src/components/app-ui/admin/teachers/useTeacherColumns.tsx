@@ -44,7 +44,7 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
             enableHiding: false,
         },
         {
-            accessorKey: "users",
+            accessorKey: "user",
             header: ({ column }) => {
                 return (
                     <Button
@@ -57,13 +57,13 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
                 )
             },
             cell: ({ row }) => (
-                <div className="capitalize">{(row.getValue("users") as User).first_name}</div>
+                <div className="capitalize">{(row.getValue("user") as User).first_name}</div>
             ),
         },
         {
-            accessorKey: "users",
+            accessorKey: "user",
             header: "Last name",
-            cell: ({ row }) => <div className="lowercase">{(row.getValue("users") as User).last_name}</div>,
+            cell: ({ row }) => <div className="lowercase">{(row.getValue("user") as User).last_name}</div>,
         },
         {
             id: "actions",
@@ -82,7 +82,7 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
                             <DropdownMenuItem asChild>
                                 <AddTeacher refreshTeachers={refreshTeachers} isEditing={true} initialValues={row.original} /></DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <DeleteConfimModal title='Delete teacher' description={`Are you sure, you want to delete teacher '${row.original.users.first_name}' ?`} onConfirm={() => deleteTeacher(row.original)} />
+                                <DeleteConfimModal title='Delete teacher' description={`Are you sure, you want to delete teacher '${row.original.user.first_name}' ?`} onConfirm={() => deleteTeacher(row.original)} />
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

@@ -28,7 +28,7 @@ import { useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
 import * as z from "zod"
-import { Teacher } from 'types/tableTypes'
+import { Teacher, User } from 'types/tableTypes'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import GenForm from '@/components/shared-ui/GenForm'
 import { FormFieldType } from 'types/appTypes'
@@ -41,7 +41,7 @@ const formSchema = z.object({
     joined_date: z.string(),
     qualification: z.string(),
     user_id: z.string(),
-    users: z.object({
+    user: z.object({
         id: z.string(),
         first_name: z.string(),
         last_name: z.string(),
@@ -68,7 +68,7 @@ const AddTeacher = ({ isEditing = false, initialValues = {
     joined_date: "",
     qualification: "",
     user_id: "",
-    users: {
+    user: {
         id: "",
         first_name: "",
         last_name: "",
@@ -91,43 +91,43 @@ const AddTeacher = ({ isEditing = false, initialValues = {
     })
 
     const fields: FormFieldType[] = [{
-        name: "users.first_name",
+        name: "user.first_name",
         label: "First Name",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.last_name",
+        name: "user.last_name",
         label: "Last Name",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.email",
+        name: "user.email",
         label: "Email",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.password",
+        name: "user.password",
         label: "Password",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.date_of_birth",
+        name: "user.date_of_birth",
         label: "DOB",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.address",
+        name: "user.address",
         label: "Address",
         description: "",
         placeholder: ""
     },
     {
-        name: "users.phone_number",
+        name: "user.phone_number",
         label: "Phone Number",
         description: "",
         placeholder: ""
@@ -159,36 +159,63 @@ const AddTeacher = ({ isEditing = false, initialValues = {
         setIsSubmitting(true)
         const supabase = createClientComponentClient<Database>()
         const {
-            users,
+            user,
             employee_id,
             qualification,
             joined_date,
+            id
         } = values
         if (isEditing) {
-            await supabase.from('users').update(values).eq("id", values.user_id)
-            let { status } = await supabase.from('teachers').update(values).eq("id", values.id)
-            status === 204 ? showSuccess("Teacher updated successfully") : showError();
+            const { error: userUpdateFailed } = await supabase.from('user').update(user).eq("id", user.id)
+
+            if (userUpdateFailed) {
+                showError()
+                return
+            }
+
+            const { error: teacherUpdateFailed } = await supabase.from('teacher').update({
+                employee_id,
+                qualification,
+                joined_date,
+            }).eq("id", id)
+
+            if (teacherUpdateFailed) {
+                showError()
+                return
+            }
+
+            showSuccess("Teacher updated successfully")
+
         } else {
             const id = v4();
 
-            let { status: createUserStatus } = await supabase.from('users').insert({
-                ...users,
-                id,
-                created_at: new Date()
+            const { error: userCreationFailed } = await supabase.from('user').insert({
+                ...user,
+                created_at: new Date(),
+                id
             })
-            if (createUserStatus != 201) {
-                showError()
+
+            if (userCreationFailed) {
                 setIsSubmitting(false)
+                showError()
                 return
             }
-            let { status } = await supabase.from('teachers').insert({
+
+            const { error: teacherCreationFailed } = await supabase.from('teacher').insert({
                 user_id: id,
                 employee_id,
                 qualification,
                 joined_date,
             })
-            status === 201 ? showSuccess("Teacher created successfully") : showError();
+
+            if (teacherCreationFailed) {
+                showError()
+                return
+            }
+
+            showSuccess("Teacher created successfully")
         }
+
         refreshTeachers?.()
         setIsSubmitting(false)
         setOpen(false)

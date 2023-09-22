@@ -52,16 +52,16 @@ export function Teachers() {
 
     const fetchTeachers = async () => {
         const supabase = createClientComponentClient<Database>()
-        const { error, data } = await supabase.from('teachers').select(`
-        *,
-        users("*")
-    `)
-        !error && setTeachers(data as unknown as Teacher[])
+
+        const { data, error } = await supabase
+            .from('teacher')
+            .select('*, user(*)');
+        !error && setTeachers(data as Teacher[])
     }
 
     const deleteTeacher = async (record: Teacher) => {
         const supabase = createClientComponentClient<Database>();
-        const { error } = await supabase.from('teachers').delete().eq("id", record.id)
+        const { error } = await supabase.from('user').delete().eq("id", record.user.id)
         if (!error) {
             toast({
                 description: "Teacher deleted successfully"
