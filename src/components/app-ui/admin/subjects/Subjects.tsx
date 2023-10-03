@@ -42,7 +42,6 @@ export function Subjects() {
         fetchSubjects();
     }, [])
 
-
     return (
         <GenTable columns={columns} data={subjects} searchId="name" rightComponent={<AddSubject refreshSubjects={fetchSubjects} />} />
     )
