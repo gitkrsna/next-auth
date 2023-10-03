@@ -1,6 +1,6 @@
 "use client"
 
-import { format } from "date-fns"
+import { format, parseISO } from "date-fns"
 import { ControllerRenderProps, FieldValues } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -30,7 +30,7 @@ const GenDatePicker = ({ field, disabled, placeholder }: { field: ControllerRend
                         )}
                     >
                         {field.value ? (
-                            format(field.value, "PPP")
+                            format(parseISO(field.value), "PPP")
                         ) : (
                             <span>{placeholder || "Pick a date"}</span>
                         )}
