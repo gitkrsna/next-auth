@@ -24,14 +24,14 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input" }: FormFieldType) => (<FormField
+                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input", controlType = "text" }: FormFieldType) => (<FormField
                     key={name}
                     control={form.control}
                     name={name}
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>{label}</FormLabel>
-                            {fieldType == 'input' && <GenInput disabled={isSubmitting} placeholder={placeholder} field={field} />}
+                            {fieldType == 'input' && <GenInput disabled={isSubmitting} placeholder={placeholder} field={field} controlType={controlType} />}
                             {fieldType == 'datepicker' && <GenDatePicker disabled={isSubmitting} placeholder={placeholder} field={field} />}
                             <FormDescription>
                                 {description}
