@@ -38,7 +38,7 @@ const formSchema = z.object({
     created_at: z.string(),
     employee_id: z.string(),
     id: z.string(),
-    joined_date: z.string(),
+    joined_date: z.date(),
     qualification: z.string(),
     user_id: z.string(),
     user: z.object({
@@ -48,7 +48,7 @@ const formSchema = z.object({
         email: z.string(),
         password: z.string(),
         role: z.literal("staff"),
-        date_of_birth: z.date().transform(d => new Date(d)),
+        date_of_birth: z.date(),
         address: z.string(),
         phone_number: z.string(),
         created_at: z.string(),

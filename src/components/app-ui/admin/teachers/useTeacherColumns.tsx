@@ -51,7 +51,7 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Name
+                        First Name
                         <CaretSortIcon className="ml-2 h-4 w-4" />
                     </Button>
                 )
