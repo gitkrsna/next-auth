@@ -13,22 +13,26 @@ import {
 import { Input } from "@/components/ui/input"
 import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form'
 import { FormFieldType } from 'types/appTypes'
+import GenDatePicker from './GenDatePicker'
+import GenInput from './GenInput'
+
 
 
 const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormReturn<FieldValues, any, undefined>, onSubmit: SubmitHandler<FieldValues>, isSubmitting: boolean, fields: FormFieldType[] }) => {
+
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {fields.map(({ name, label, placeholder, description }: FormFieldType) => (<FormField
+                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input" }: FormFieldType) => (<FormField
                     key={name}
                     control={form.control}
                     name={name}
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>{label}</FormLabel>
-                            <FormControl>
-                                <Input disabled={isSubmitting} placeholder={placeholder} {...field} />
-                            </FormControl>
+                            {fieldType == 'input' && <GenInput disabled={isSubmitting} placeholder={placeholder} field={field} />}
+                            {fieldType == 'datepicker' && <GenDatePicker disabled={isSubmitting} placeholder={placeholder} field={field} />}
                             <FormDescription>
                                 {description}
                             </FormDescription>

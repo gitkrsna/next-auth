@@ -16,12 +16,13 @@ import { cn } from "@/lib/utils"
 
 import { CalendarIcon } from '@radix-ui/react-icons'
 
-const GenDatePicker = ({ field }: { field: ControllerRenderProps<FieldValues, string> }) => {
+const GenDatePicker = ({ field, disabled, placeholder }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string }) => {
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <FormControl>
                     <Button
+                        disabled={disabled}
                         variant={"outline"}
                         className={cn(
                             "w-[100%] pl-3 text-left font-normal",
@@ -31,7 +32,7 @@ const GenDatePicker = ({ field }: { field: ControllerRenderProps<FieldValues, st
                         {field.value ? (
                             format(field.value, "PPP")
                         ) : (
-                            <span>Pick a date</span>
+                            <span>{placeholder || "Pick a date"}</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

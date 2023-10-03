@@ -48,7 +48,7 @@ const formSchema = z.object({
         email: z.string(),
         password: z.string(),
         role: z.literal("staff"),
-        date_of_birth: z.string().transform(d => new Date(d)),
+        date_of_birth: z.date().transform(d => new Date(d)),
         address: z.string(),
         phone_number: z.string(),
         created_at: z.string(),
@@ -93,62 +93,45 @@ const AddTeacher = ({ isEditing = false, initialValues = {
     const fields: FormFieldType[] = [{
         name: "user.first_name",
         label: "First Name",
-        description: "",
-        placeholder: ""
     },
     {
         name: "user.last_name",
         label: "Last Name",
-        description: "",
-        placeholder: ""
     },
     {
         name: "user.email",
         label: "Email",
-        description: "",
-        placeholder: ""
     },
     {
         name: "user.password",
         label: "Password",
-        description: "",
-        placeholder: ""
     },
     {
         name: "user.date_of_birth",
         label: "DOB",
-        description: "",
-        placeholder: ""
+        fieldType: "datepicker"
     },
     {
         name: "user.address",
         label: "Address",
-        description: "",
-        placeholder: ""
     },
     {
         name: "user.phone_number",
         label: "Phone Number",
-        description: "",
-        placeholder: ""
     },
     {
         name: "employee_id",
         label: "Employee Id",
-        description: "",
-        placeholder: ""
     },
     {
         name: "qualification",
         label: "Qualification",
-        description: "",
-        placeholder: ""
     },
     {
         name: "joined_date",
         label: "Joined Date",
-        description: "",
-        placeholder: ""
+        fieldType: "datepicker",
+        placeholder: "select joining date"
     }]
 
     // useEffect(() => {
