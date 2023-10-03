@@ -20,6 +20,7 @@ import {
 import AddTeacher from './AddTeacher'
 import { Teacher, User } from 'types/tableTypes'
 import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal'
+import { ReactNode } from 'react'
 
 
 const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers: () => void, deleteTeacher: (record: Teacher) => Promise<void> }) => {
@@ -44,7 +45,10 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
             enableHiding: false,
         },
         {
-            accessorKey: "user",
+            id: "First name",
+            accessorFn: (originalRow) => {
+                return originalRow.user.first_name
+            },
             header: ({ column }) => {
                 return (
                     <Button
@@ -56,14 +60,17 @@ const useTeacherColumns = ({ refreshTeachers, deleteTeacher }: { refreshTeachers
                     </Button>
                 )
             },
-            cell: ({ row }) => (
-                <div className="capitalize">{(row.getValue("user") as User).first_name}</div>
-            ),
+            cell: ({ renderValue }) =>
+                <div className="capitalize">{renderValue() as ReactNode}</div>
+            ,
         },
         {
-            accessorKey: "user",
+            id: "Last name",
+            accessorFn: (originalRow) => {
+                return originalRow.user.last_name
+            },
             header: "Last name",
-            cell: ({ row }) => <div className="lowercase">{(row.getValue("user") as User).last_name}</div>,
+            cell: ({ renderValue }) => <div className="lowercase">{renderValue() as ReactNode}</div>,
         },
         {
             id: "actions",
