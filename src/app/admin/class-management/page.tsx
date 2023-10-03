@@ -1,5 +1,6 @@
 import { Courses } from '@/components/app-ui/admin/courses/Courses'
-import Subjects from '@/components/app-ui/admin/subject/Subjects'
+import { Subjects } from '@/components/app-ui/admin/subjects/Subjects'
+
 import React from 'react'
 
 const CourseManagement = () => {
