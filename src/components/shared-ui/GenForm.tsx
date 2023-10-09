@@ -17,6 +17,7 @@ import GenDatePicker from './GenDatePicker'
 import GenInput from './GenInput'
 import GenSelect from './GenSelect'
 import GenSearchableSelect from './GenSearchableSelect'
+import { GenSearchableMultiSelect } from './GenSearchableMultiSelect'
 
 
 
@@ -37,6 +38,7 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
                             {fieldType == 'datepicker' && <GenDatePicker disabled={isSubmitting} placeholder={placeholder} field={field} />}
                             {fieldType == 'select' && <GenSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} />}
                             {fieldType == 'searchableSelect' && <GenSearchableSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} onSelect={(option) => onSelect?.(option)} />}
+                            {fieldType == 'multiSelect' && <GenSearchableMultiSelect value={[]} disabled={isSubmitting} placeholder={placeholder} options={options} onSelect={(option) => onSelect?.(option)} />}
                             <FormDescription>
                                 {description}
                             </FormDescription>
