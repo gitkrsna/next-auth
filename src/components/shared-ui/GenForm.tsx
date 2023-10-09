@@ -15,6 +15,8 @@ import { FieldValues, SubmitHandler, UseFormReturn } from 'react-hook-form'
 import { FormFieldType } from 'types/appTypes'
 import GenDatePicker from './GenDatePicker'
 import GenInput from './GenInput'
+import GenSelect from './GenSelect'
+import GenSearchableSelect from './GenSearchableSelect'
 
 
 
@@ -24,7 +26,7 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input", controlType = "text" }: FormFieldType) => (<FormField
+                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input", controlType = "text", options, onSelect }: FormFieldType) => (<FormField
                     key={name}
                     control={form.control}
                     name={name}
@@ -33,6 +35,8 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
                             <FormLabel>{label}</FormLabel>
                             {fieldType == 'input' && <GenInput disabled={isSubmitting} placeholder={placeholder} field={field} controlType={controlType} />}
                             {fieldType == 'datepicker' && <GenDatePicker disabled={isSubmitting} placeholder={placeholder} field={field} />}
+                            {fieldType == 'select' && <GenSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} />}
+                            {fieldType == 'searchableSelect' && <GenSearchableSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} onSelect={(option) => onSelect?.(option)} />}
                             <FormDescription>
                                 {description}
                             </FormDescription>
