@@ -6,3 +6,4 @@ export type Subject = Database['public']['Tables']['subjects']['Row'];
 export type Teacher = Database['public']['Tables']['teacher']['Row'] & {
   user: User;
 };
+export type Class = Database['public']['Tables']['classes']['Row'];
