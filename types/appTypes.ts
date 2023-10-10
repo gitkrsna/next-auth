@@ -13,9 +13,6 @@ interface FormFieldType {
     | 'multiSelect';
   controlType?: 'text' | 'number' | 'password' | 'time';
   options?: { label: string; value: string }[];
-  onSelect?:
-    | ((option: SelectOption) => void)
-    | ((option: string[]) => React.Dispatch<React.SetStateAction<string[]>>);
 }
 
 interface SelectOption {
