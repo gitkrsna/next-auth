@@ -33,7 +33,7 @@ function GenSearchableMultiSelect({ field, options, className, disabled, placeho
     const [open, setOpen] = React.useState(false)
 
     const name = field.name;
-    const value = (field.value || []) as string[]
+    const value = (JSON.parse(field.value || '[]')) as string[]
 
     const handleUnselect = (item: string) => {
         form.setValue(name, (value.filter((i) => i !== item)))
