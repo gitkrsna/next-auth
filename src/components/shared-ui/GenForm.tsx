@@ -26,8 +26,8 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input", controlType = "text", options, onSelect }: FormFieldType) => (<FormField
+            <form onSubmit={form.handleSubmit(onSubmit, console.log)} className="space-y-8">
+                {fields.map(({ name, label, placeholder = "", description = "", fieldType = "input", controlType = "text", options }: FormFieldType) => (<FormField
                     key={name}
                     control={form.control}
                     name={name}
@@ -37,8 +37,8 @@ const GenForm = ({ form, onSubmit, isSubmitting, fields, }: { form: UseFormRetur
                             {fieldType == 'input' && <GenInput disabled={isSubmitting} placeholder={placeholder} field={field} controlType={controlType} />}
                             {fieldType == 'datepicker' && <GenDatePicker disabled={isSubmitting} placeholder={placeholder} field={field} />}
                             {fieldType == 'select' && <GenSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} />}
-                            {fieldType == 'searchableSelect' && <GenSearchableSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} onSelect={(option) => onSelect?.(option)} />}
-                            {fieldType == 'multiSelect' && <GenSearchableMultiSelect value={[]} disabled={isSubmitting} placeholder={placeholder} options={options} onSelect={(option) => onSelect?.(option)} />}
+                            {fieldType == 'searchableSelect' && <GenSearchableSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} form={form} />}
+                            {fieldType == 'multiSelect' && <GenSearchableMultiSelect disabled={isSubmitting} placeholder={placeholder} field={field} options={options} form={form} />}
                             <FormDescription>
                                 {description}
                             </FormDescription>
