@@ -29,9 +29,9 @@ const formSchema = z.object({
     teacher_id: z.string(),
     start_time: z.string(),
     end_time: z.string(),
-    day_of_week: z.string(),
+    day_of_week: z.string().array(),
     room: z.string(),
-    created_at: z.string(),
+    created_at: z.string().or(z.null()),
 
 })
 
@@ -49,7 +49,7 @@ const AddClass = ({ isEditing = false, initialValues = {
     end_time: "",
     day_of_week: "",
     room: "",
-    created_at: "",
+    created_at: null,
 
 }, refreshClasss }: AddClassProps) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -92,12 +92,13 @@ const AddClass = ({ isEditing = false, initialValues = {
 
         const { data, error } = await supabase
             .from('teacher')
-            .select('id, user(first_name, last_name)');
+            .select('user(id, first_name, last_name)');
+
         if (!error) {
-            const teacherOptions = (data || []).map(({ id, user }) => ({
+            const teacherOptions = (data || []).map(({ user }) => ({
                 label: `${user?.first_name} ${user?.last_name}`,
-                value: id
-            }))
+                value: user?.id
+            })) as SelectOption[]
             setTeachers(teacherOptions)
         }
 
@@ -109,6 +110,7 @@ const AddClass = ({ isEditing = false, initialValues = {
         const { data, error } = await supabase
             .from('courses')
             .select('id, name');
+
         if (!error) {
             const courseOptions = (data || []).map(({ id, name }) => ({
                 label: name,
@@ -128,19 +130,13 @@ const AddClass = ({ isEditing = false, initialValues = {
         name: "course_id",
         label: "Select Course",
         fieldType: "searchableSelect",
-        options: courses,
-        onSelect: (option: SelectOption) => {
-            form.setValue("course_id", option.value)
-        }
+        options: courses
     },
     {
         name: "teacher_id",
         label: "Select Teacher",
         options: teachers,
         fieldType: "searchableSelect",
-        onSelect: (option: SelectOption) => {
-            form.setValue("teacher_id", option.value)
-        }
     },
     {
         name: "start_time",
@@ -157,9 +153,6 @@ const AddClass = ({ isEditing = false, initialValues = {
         label: "Days of Week",
         options: weekdaysOptions,
         fieldType: 'multiSelect',
-        onSelect: (value: string[]) => {
-            form.setValue("day_of_week", value)
-        }
     },
     {
         name: "room",
@@ -173,57 +166,23 @@ const AddClass = ({ isEditing = false, initialValues = {
     async function onSubmit(values: FieldValues) {
         setIsSubmitting(true)
         const supabase = createClientComponentClient<Database>()
-        const {
-            user,
-            employee_id,
-            qualification,
-            joined_date,
-            id
-        } = values
         if (isEditing) {
-            const { error: userUpdateFailed } = await supabase.from('user').update(user).eq("id", user.id)
-
-            if (userUpdateFailed) {
-                showError()
-                return
-            }
-
-            const { error: classUpdateFailed } = await supabase.from('class').update({
-                employee_id,
-                qualification,
-                joined_date,
-            }).eq("id", id)
-
+            const { error: classUpdateFailed } = await supabase.from('classes').update(values).eq("id", values.id)
             if (classUpdateFailed) {
                 showError()
                 return
             }
 
             showSuccess("Class updated successfully")
-
         } else {
             const id = v4();
-
-            const { error: userCreationFailed } = await supabase.from('user').insert({
-                ...user,
-                created_at: new Date(),
+            const { error: userCreationFailed } = await supabase.from('classes').insert({
+                ...values,
                 id
             })
 
             if (userCreationFailed) {
                 setIsSubmitting(false)
-                showError()
-                return
-            }
-
-            const { error: classCreationFailed } = await supabase.from('class').insert({
-                user_id: id,
-                employee_id,
-                qualification,
-                joined_date,
-            })
-
-            if (classCreationFailed) {
                 showError()
                 return
             }
