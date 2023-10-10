@@ -37,7 +37,7 @@ const formSchema = z.object({
 
 interface AddClassProps {
     isEditing?: boolean,
-    initialValues?: Class,
+    initialValues?: Omit<Class, "user" | "courses">,
     refreshClasss?: () => void
 }
 
@@ -179,7 +179,7 @@ const AddClass = ({ isEditing = false, initialValues = {
             const { error: userCreationFailed } = await supabase.from('classes').insert({
                 ...values,
                 id
-            })
+            }).select('*')
 
             if (userCreationFailed) {
                 setIsSubmitting(false)
