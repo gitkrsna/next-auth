@@ -18,24 +18,27 @@ import {
 } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge";
 import { SelectOption } from 'types/appTypes'
+import { ControllerRenderProps, FieldValues, UseFormReturn } from 'react-hook-form'
 
 interface GenSearchableMultiSelectProps {
+    field: ControllerRenderProps<FieldValues, string>,
     options?: SelectOption[];
-    value: string[];
-    onSelect: React.Dispatch<React.SetStateAction<string[]>>;
     className?: string;
     disabled: boolean,
-    placeholder: string
+    placeholder: string,
+    form: UseFormReturn<FieldValues, any, undefined>
 }
 
-function GenSearchableMultiSelect({ options, value, onSelect, className, disabled, placeholder, ...props }: GenSearchableMultiSelectProps) {
-
+function GenSearchableMultiSelect({ field, options, className, disabled, placeholder, form, ...props }: GenSearchableMultiSelectProps) {
     const [open, setOpen] = React.useState(false)
 
-    const handleUnselect = (item: string) => {
-        onSelect(value.filter((i) => i !== item))
-    }
+    const name = field.name;
+    const value = (field.value || []) as string[]
 
+    const handleUnselect = (item: string) => {
+        form.setValue(name, (value.filter((i) => i !== item)))
+        setOpen(true)
+    }
     return (
         <Popover open={open} onOpenChange={setOpen} {...props}>
             <PopoverTrigger disabled={disabled} asChild>
@@ -85,11 +88,9 @@ function GenSearchableMultiSelect({ options, value, onSelect, className, disable
                             <CommandItem
                                 key={option.value}
                                 onSelect={() => {
-                                    onSelect(
-                                        value.includes(option.value)
-                                            ? value.filter((item) => item !== option.value)
-                                            : [...value, option.value]
-                                    )
+                                    value.includes(option.value)
+                                        ? form.setValue(name, value.filter(item => item != option.value))
+                                        : form.setValue(name, [...value, option.value])
                                     setOpen(true)
                                 }}
                             >
@@ -106,7 +107,7 @@ function GenSearchableMultiSelect({ options, value, onSelect, className, disable
                     </CommandGroup>
                 </Command>
             </PopoverContent>
-        </Popover>
+        </Popover >
     )
 }
 

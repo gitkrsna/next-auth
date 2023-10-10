@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils"
 import { ControllerRenderProps, FieldValues, UseFormReturn } from 'react-hook-form'
 import { SelectOption } from 'types/appTypes'
 
-const GenSearchableSelect = ({ field, disabled, placeholder, options, onSelect }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string, options?: SelectOption[], onSelect: ((option: SelectOption) => void) }) => {
+const GenSearchableSelect = ({ field, disabled, placeholder, options, form }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string, options?: SelectOption[], form: UseFormReturn<FieldValues, any, undefined> }) => {
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -57,7 +57,7 @@ const GenSearchableSelect = ({ field, disabled, placeholder, options, onSelect }
                             <CommandItem
                                 value={option.label}
                                 key={option.value}
-                                onSelect={() => onSelect(option)}
+                                onSelect={() => form.setValue(field.name, option.value)}
                             >
                                 {option.label}
                                 <CheckIcon
