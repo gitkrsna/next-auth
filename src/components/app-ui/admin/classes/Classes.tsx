@@ -19,7 +19,7 @@ export function Classes() {
 
         const { data, error } = await supabase
             .from('classes')
-            .select('start_time, end_time, day_of_week, room, created_at, user(id, first_name, last_name), courses(id, name)');
+            .select('id, start_time, end_time, day_of_week, room, created_at, user(id, first_name, last_name), courses(id, name)');
 
         !error && setClasss(data as Class[])
 

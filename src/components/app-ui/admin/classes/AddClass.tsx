@@ -25,31 +25,38 @@ import * as z from "zod"
 
 const formSchema = z.object({
     id: z.string(),
-    course_id: z.string(),
-    teacher_id: z.string(),
     start_time: z.string(),
     end_time: z.string(),
     day_of_week: z.string().array(),
     room: z.string(),
     created_at: z.string().or(z.null()),
-
+    user: z.object({
+        id: z.string()
+    }),
+    courses: z.object({
+        id: z.string()
+    })
 })
 
 interface AddClassProps {
     isEditing?: boolean,
-    initialValues?: Omit<Class, "user" | "courses">,
+    initialValues?: Class,
     refreshClasss?: () => void
 }
 
 const AddClass = ({ isEditing = false, initialValues = {
     id: "",
-    course_id: "",
-    teacher_id: "",
     start_time: "",
     end_time: "",
     day_of_week: "",
     room: "",
     created_at: null,
+    user: {
+        id: "",
+    },
+    courses: {
+        id: "",
+    }
 
 }, refreshClasss }: AddClassProps) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -127,13 +134,13 @@ const AddClass = ({ isEditing = false, initialValues = {
     }, [])
 
     const fields: FormFieldType[] = [{
-        name: "course_id",
+        name: "courses.id",
         label: "Select Course",
         fieldType: "searchableSelect",
         options: courses
     },
     {
-        name: "teacher_id",
+        name: "user.id",
         label: "Select Teacher",
         options: teachers,
         fieldType: "searchableSelect",
@@ -166,8 +173,15 @@ const AddClass = ({ isEditing = false, initialValues = {
     async function onSubmit(values: FieldValues) {
         setIsSubmitting(true)
         const supabase = createClientComponentClient<Database>()
+        const { user, courses, ...classesData } = values;
+        const payload = {
+            ...classesData,
+            teacher_id: user.id,
+            course_id: courses.id,
+        }
         if (isEditing) {
-            const { error: classUpdateFailed } = await supabase.from('classes').update(values).eq("id", values.id)
+
+            const { error: classUpdateFailed } = await supabase.from('classes').update(payload).eq("id", classesData.id)
             if (classUpdateFailed) {
                 showError()
                 return
@@ -177,7 +191,7 @@ const AddClass = ({ isEditing = false, initialValues = {
         } else {
             const id = v4();
             const { error: userCreationFailed } = await supabase.from('classes').insert({
-                ...values,
+                ...payload,
                 id
             }).select('*')
 

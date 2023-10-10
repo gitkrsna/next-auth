@@ -48,7 +48,8 @@ const useClassColumns = ({ refreshClasss, deleteClass }: { refreshClasss: () => 
         {
             id: "Class teacher",
             accessorFn: (originalRow) => {
-                const { user: { first_name, last_name } } = originalRow
+                const { user } = originalRow;
+                const { first_name, last_name } = user || {};
                 return `${first_name} ${last_name}`
             },
             header: ({ column }) => {
@@ -69,7 +70,7 @@ const useClassColumns = ({ refreshClasss, deleteClass }: { refreshClasss: () => 
         {
             id: "Class name",
             accessorFn: (originalRow) => {
-                return originalRow.courses.name
+                return originalRow.courses?.name
             },
             header: "Class name",
             cell: ({ renderValue }) => <div className="lowercase">{renderValue() as ReactNode}</div>,
