@@ -24,7 +24,7 @@ import { ReactNode } from 'react'
 
 
 
-const useClassColumns = ({ refreshClasss, deleteClass }: { refreshClasss: () => void, deleteClass: (record: Class) => Promise<void> }) => {
+const useClassColumns = ({ refreshClasses, deleteClass }: { refreshClasses: () => void, deleteClass: (record: Class) => Promise<void> }) => {
     const columns: ColumnDef<Class>[] = [
         {
             id: "select",
@@ -114,7 +114,7 @@ const useClassColumns = ({ refreshClasss, deleteClass }: { refreshClasss: () => 
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem asChild>
-                                <AddClass refreshClasss={refreshClasss} isEditing={true} initialValues={row.original} /></DropdownMenuItem>
+                                <AddClass refreshClasses={refreshClasses} isEditing={true} initialValues={row.original} /></DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <DeleteConfimModal title='Delete class' description={`Are you sure, you want to delete this class?`} onConfirm={() => deleteClass(row.original)} />
                             </DropdownMenuItem>

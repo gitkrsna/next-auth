@@ -12,7 +12,7 @@ import useClassColumns from './useClassColumns'
 export function Classes() {
     const { toast } = useToast()
 
-    const [classs, setClasss] = React.useState<Class[]>([]);
+    const [classes, setClasses] = React.useState<Class[]>([]);
 
     const fetchClasses = async () => {
         const supabase = createClientComponentClient<Database>()
@@ -21,7 +21,7 @@ export function Classes() {
             .from('classes')
             .select('id, start_time, end_time, day_of_week, room, created_at, user(id, first_name, last_name), courses(id, name)');
 
-        !error && setClasss(data as Class[])
+        !error && setClasses(data as Class[])
 
     }
 
@@ -41,13 +41,13 @@ export function Classes() {
         }
     }
 
-    const columns = useClassColumns({ refreshClasss: fetchClasses, deleteClass })
+    const columns = useClassColumns({ refreshClasses: fetchClasses, deleteClass })
 
     React.useEffect(() => {
         fetchClasses();
     }, [])
 
     return (
-        <GenTable columns={columns} data={classs} searchId="Class name" rightComponent={<AddClass refreshClasss={fetchClasses} />} />
+        <GenTable columns={columns} data={classes} searchId="Class name" rightComponent={<AddClass refreshClasses={fetchClasses} />} />
     )
 }
