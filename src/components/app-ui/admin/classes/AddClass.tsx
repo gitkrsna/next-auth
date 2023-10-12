@@ -40,7 +40,7 @@ const formSchema = z.object({
 
 interface AddClassProps {
     isEditing?: boolean,
-    initialValues?: Class,
+    initialValues?: Omit<Class, "user" | "courses"> & { user: { id: string } } & { courses: { id: string } },
     refreshClasss?: () => void
 }
 
@@ -56,7 +56,9 @@ const AddClass = ({ isEditing = false, initialValues = {
     },
     courses: {
         id: "",
-    }
+    },
+    course_id: "",
+    teacher_id: "",
 
 }, refreshClasss }: AddClassProps) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
