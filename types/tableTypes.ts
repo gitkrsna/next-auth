@@ -9,3 +9,6 @@ export type Teacher = Database['public']['Tables']['teacher']['Row'] & {
 export type Class = Database['public']['Tables']['classes']['Row'] & {
   user: User;
 } & { courses: Course };
+export type TimeTable = Database['public']['Tables']['timetable']['Row'] & {
+  teacher: Teacher;
+} & { class: Class } & { subject: Subject };

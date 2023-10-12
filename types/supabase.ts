@@ -191,6 +191,7 @@ export interface Database {
           day_of_week: string | null
           end_time: string | null
           id: string
+          name: string | null
           room: string | null
           start_time: string | null
           teacher_id: string | null
@@ -201,6 +202,7 @@ export interface Database {
           day_of_week?: string | null
           end_time?: string | null
           id?: string
+          name?: string | null
           room?: string | null
           start_time?: string | null
           teacher_id?: string | null
@@ -211,6 +213,7 @@ export interface Database {
           day_of_week?: string | null
           end_time?: string | null
           id?: string
+          name?: string | null
           room?: string | null
           start_time?: string | null
           teacher_id?: string | null
