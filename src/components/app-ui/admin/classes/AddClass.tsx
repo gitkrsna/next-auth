@@ -19,12 +19,13 @@ import { useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { FormFieldType, SelectOption } from 'types/appTypes'
 import { Database } from 'types/supabase'
-import { Class, Teacher } from 'types/tableTypes'
+import { Class } from 'types/tableTypes'
 import { v4 } from "uuid"
 import * as z from "zod"
 
 const formSchema = z.object({
     id: z.string(),
+    name: z.string(),
     start_time: z.string(),
     end_time: z.string(),
     day_of_week: z.string().array(),
@@ -57,6 +58,7 @@ const AddClass = ({ isEditing = false, initialValues = {
     courses: {
         id: "",
     },
+    name: "",
     course_id: "",
     teacher_id: "",
 
@@ -135,38 +137,43 @@ const AddClass = ({ isEditing = false, initialValues = {
         fetchCourses()
     }, [])
 
-    const fields: FormFieldType[] = [{
-        name: "courses.id",
-        label: "Select Course",
-        fieldType: "searchableSelect",
-        options: courses
-    },
-    {
-        name: "user.id",
-        label: "Select Teacher",
-        options: teachers,
-        fieldType: "searchableSelect",
-    },
-    {
-        name: "start_time",
-        label: "Start Time",
-        controlType: 'time'
-    },
-    {
-        name: "end_time",
-        label: "End Time",
-        controlType: 'time'
-    },
-    {
-        name: "day_of_week",
-        label: "Days of Week",
-        options: weekdaysOptions,
-        fieldType: 'multiSelect',
-    },
-    {
-        name: "room",
-        label: "Room No.",
-    }]
+    const fields: FormFieldType[] = [
+        {
+            name: "name",
+            label: "Class name",
+        },
+        {
+            name: "courses.id",
+            label: "Select Course",
+            fieldType: "searchableSelect",
+            options: courses
+        },
+        {
+            name: "user.id",
+            label: "Select Teacher",
+            options: teachers,
+            fieldType: "searchableSelect",
+        },
+        {
+            name: "start_time",
+            label: "Start Time",
+            controlType: 'time'
+        },
+        {
+            name: "end_time",
+            label: "End Time",
+            controlType: 'time'
+        },
+        {
+            name: "day_of_week",
+            label: "Days of Week",
+            options: weekdaysOptions,
+            fieldType: 'multiSelect',
+        },
+        {
+            name: "room",
+            label: "Room No.",
+        }]
 
     // useEffect(() => {
     //     open && form.reset()
