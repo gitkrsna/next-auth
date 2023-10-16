@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
     return (
-        <div><TimeTables /></div>
+        <div className='px-10 flex justify-center'><TimeTables /></div>
     )
 }
 
