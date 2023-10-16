@@ -3,7 +3,9 @@ import LoginForm from './LoginForm'
 
 const Login = () => {
     return (
-        <div><LoginForm /></div>
+        <div className='flex justify-center items-center bg-black h-screen'>
+            <LoginForm />
+        </div>
     )
 }
 
