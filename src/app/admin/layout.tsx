@@ -28,9 +28,19 @@ const layout = ({ children }: {
 
     return (
         <div>
-            <NavMenu defaultValue='/admin/course-management' navMenuItems={menuItems} />
+            <div className='px-10 py-5 flex justify-between'>
+                <NavMenu defaultValue='/admin/course-management' navMenuItems={menuItems} />
+                <div>
+                    <form action="/auth/signout" method="post">
+                        <button className="button block hover:font-bold" type="submit">
+                            Sign out
+                        </button>
+                    </form>
+                </div>
+            </div>
             {children}
         </div>
+
     )
 }
 

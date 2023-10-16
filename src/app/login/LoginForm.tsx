@@ -13,7 +13,7 @@ export default function LoginForm() {
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event, session) => {
                 if (event === 'SIGNED_IN') {
-                    window.location.href = "/";
+                    window.location.href = "/admin/course-management";
                 }
             }
         );
