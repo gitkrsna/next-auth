@@ -1,9 +1,9 @@
 import React from 'react'
-import AuthForm from './AuthForm'
+import LoginForm from './LoginForm'
 
 const Login = () => {
     return (
-        <div><AuthForm /></div>
+        <div><LoginForm /></div>
     )
 }
 

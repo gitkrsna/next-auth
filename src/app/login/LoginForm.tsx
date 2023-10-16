@@ -6,7 +6,7 @@ import { Database } from 'types/supabase';
 import { useEffect } from 'react';
 
 
-export default function AuthForm() {
+export default function LoginForm() {
     const supabase = createClientComponentClient<Database>();
 
     useEffect(() => {
