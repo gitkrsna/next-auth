@@ -77,8 +77,15 @@ const menuItems: NavMenuItem[] = [
 
 const AdminNav = () => {
   return (
-    <div className='px-10 py-5'>
+    <div className='px-10 py-5 flex justify-between'>
       <NavMenu navMenuItems={menuItems} />
+      <div>
+        <form action="/auth/signout" method="post">
+          <button className="button block" type="submit">
+            Sign out
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
