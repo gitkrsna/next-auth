@@ -1,6 +1,6 @@
 
 import { ProfileForm } from '@/components/app-ui/student/AddStudent'
-import AuthForm from './login/auth-form'
+import AuthForm from './login/AuthForm'
 import { NavMenu, NavMenuItem } from '@/components/shared-ui/NavMenu'
 import AdminNav from '@/components/app-ui/admin/AdminNav'
 import StudentNav from '@/components/app-ui/student/StudentNav'
