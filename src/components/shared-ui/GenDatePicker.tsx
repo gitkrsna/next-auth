@@ -16,12 +16,18 @@ import { CalendarIcon } from '@radix-ui/react-icons'
 import { Input } from '../ui/input'
 import { useState } from 'react'
 
-const GenDatePicker = ({ field, disabled, placeholder }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string }) => {
+const GenDatePicker = ({ field, disabled }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string }) => {
+    const [inputDate, setInputDate] = useState<string | undefined>(new Date(field.value).toLocaleDateString())
     return (
         <Popover>
             <div className='flex relative'>
                 <FormControl>
-                    <Input disabled={disabled} placeholder={"DD/MM/YYYY"} {...field} />
+                    <Input disabled={disabled} placeholder={"DD/MM/YYYY"} {...field} onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const date = parse(inputValue, 'dd/MM/yyyy', new Date())
+                        field.onChange(date)
+                        setInputDate(inputValue)
+                    }} value={inputDate} />
                 </FormControl>
                 <PopoverTrigger asChild>
                     <CalendarIcon className='absolute right-2 top-2 hover:cursor-pointer' />
@@ -30,9 +36,10 @@ const GenDatePicker = ({ field, disabled, placeholder }: { field: ControllerRend
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                     mode="single"
-                    selected={parse(field.value, 'dd/MM/yyyy', new Date())}
+                    selected={field.value}
                     onSelect={date => {
-                        field.onChange(date?.toLocaleDateString("en-IN"))
+                        field.onChange(date)
+                        setInputDate(date?.toLocaleDateString("en-IN"))
                     }}
                     disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
