@@ -37,7 +37,7 @@ const GenDatePicker = ({ field, disabled }: { field: ControllerRenderProps<Field
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                     mode="single"
-                    selected={field.value}
+                    selected={new Date(field.value)}
                     onSelect={date => {
                         field.onChange(date)
                         setInputDate(date?.toLocaleDateString("en-IN"))
