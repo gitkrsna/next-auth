@@ -8,8 +8,8 @@ import {
     ColumnDef
 } from "@tanstack/react-table"
 
+import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal'
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,47 +17,31 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import AddSubject from './AddSubject'
+import { ReactNode } from 'react'
 import { Subject } from 'types/tableTypes'
-import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal'
+import AddSubject from './AddSubject'
 
 
 const useSubjectColumns = ({ refreshSubjects, deleteSubject }: { refreshSubjects: () => void, deleteSubject: (record: Subject) => Promise<void> }) => {
     const columns: ColumnDef<Subject>[] = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected()}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            accessorKey: "name",
+            id: "Subject name",
+            accessorFn: (originalRow) => {
+                return originalRow.name
+            },
             header: ({ column }) => {
                 return (
                     <Button
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Name
+                        Subject Name
                         <CaretSortIcon className="ml-2 h-4 w-4" />
                     </Button>
                 )
             },
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("name")}</div>
+            cell: ({ renderValue }) => (
+                <div className="capitalize">{renderValue() as ReactNode}</div>
             ),
         },
         {

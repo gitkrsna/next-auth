@@ -10,6 +10,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog"
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
     Form,
     FormControl,
@@ -27,9 +28,8 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Database } from 'types/supabase'
-import * as z from "zod"
 import { Subject } from 'types/tableTypes'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import * as z from "zod"
 
 const formSchema = z.object({
     name: z.string().min(2, {
