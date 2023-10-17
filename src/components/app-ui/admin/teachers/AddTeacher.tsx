@@ -36,21 +36,23 @@ import { v4 } from "uuid";
 
 const formSchema = z.object({
     created_at: z.string(),
-    employee_id: z.string(),
+    employee_id: z.string().nonempty("Employee id required"),
     id: z.string(),
-    joined_date: z.date(),
-    qualification: z.string(),
+    joined_date: z.string().nonempty("Joining date required").or(z.date()),
+    qualification: z.string().nonempty("Qualification required"),
     user_id: z.string(),
     user: z.object({
         id: z.string(),
-        first_name: z.string(),
-        last_name: z.string(),
-        email: z.string(),
-        password: z.string(),
+        first_name: z.string().max(50).nonempty("First name required"),
+        last_name: z.string().max(50).nonempty("Last name required"),
+        email: z.string().email().nonempty("Email required"),
+        password: z.string().nonempty("Password required"),
         role: z.literal("staff"),
-        date_of_birth: z.date(),
-        address: z.string(),
-        phone_number: z.string(),
+        date_of_birth: z.string().nonempty("DOB required").or(z.date()),
+        address: z.string().nonempty("Address required"),
+        phone_number: z.string().nonempty("Phone number required").refine(value => /^[6789]\d{9}$/.test(value), {
+            message: "Invalid phone number",
+        }),
         created_at: z.string(),
     }),
 })
@@ -109,7 +111,8 @@ const AddTeacher = ({ isEditing = false, initialValues = {
     {
         name: "user.date_of_birth",
         label: "DOB",
-        fieldType: "datepicker"
+        fieldType: "datepicker",
+        placeholder: "Select dob"
     },
     {
         name: "user.address",
@@ -131,7 +134,7 @@ const AddTeacher = ({ isEditing = false, initialValues = {
         name: "joined_date",
         label: "Joined Date",
         fieldType: "datepicker",
-        placeholder: "select joining date"
+        placeholder: "Select joining date"
     }]
 
     // useEffect(() => {
