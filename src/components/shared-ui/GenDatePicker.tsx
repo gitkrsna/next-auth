@@ -1,8 +1,5 @@
 "use client"
 
-import { format, isDate, parseISO } from "date-fns"
-import { ControllerRenderProps, FieldValues } from "react-hook-form"
-import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
     FormControl
@@ -12,39 +9,31 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+import { parse } from "date-fns"
+import { ControllerRenderProps, FieldValues } from "react-hook-form"
 
 import { CalendarIcon } from '@radix-ui/react-icons'
+import { Input } from '../ui/input'
+import { useState } from 'react'
 
 const GenDatePicker = ({ field, disabled, placeholder }: { field: ControllerRenderProps<FieldValues, string>, disabled: boolean, placeholder: string }) => {
     return (
         <Popover>
-            <PopoverTrigger asChild>
+            <div className='flex relative'>
                 <FormControl>
-                    <Button
-                        disabled={disabled}
-                        variant={"outline"}
-                        className={cn(
-                            "w-[100%] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                        )}
-                    >
-                        {field.value ? (
-                            isDate(field.value)
-                                ? format(field.value, 'PPP')
-                                : format(parseISO(field.value), 'PPP')
-                        ) : (
-                            <span>{placeholder || "Pick a date"}</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                    <Input disabled={disabled} placeholder={"DD/MM/YYYY"} {...field} />
                 </FormControl>
-            </PopoverTrigger>
+                <PopoverTrigger asChild>
+                    <CalendarIcon className='absolute right-2 top-2 hover:cursor-pointer' />
+                </PopoverTrigger>
+            </div>
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                     mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
+                    selected={parse(field.value, 'dd/MM/yyyy', new Date())}
+                    onSelect={date => {
+                        field.onChange(date?.toLocaleDateString("en-IN"))
+                    }}
                     disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
                     }
