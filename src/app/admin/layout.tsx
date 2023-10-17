@@ -14,16 +14,16 @@ const layout = ({ children }: {
             "content": "/admin/subject-management",
         },
         {
+            "trigger": "Teacher",
+            "content": "/admin/teacher-management",
+        },
+        {
             "trigger": "Class",
             "content": "/admin/class-management",
         },
         {
             "trigger": "Time Table",
             "content": "/admin/timetable-management",
-        },
-        {
-            "trigger": "Teacher",
-            "content": "/admin/teacher-management",
         }]
 
     return (
