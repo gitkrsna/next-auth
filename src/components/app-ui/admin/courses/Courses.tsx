@@ -43,6 +43,6 @@ export function Courses() {
     }, [])
 
     return (
-        <GenTable columns={columns} data={courses} searchId="name" rightComponent={<AddCourse refreshCourses={fetchCourses} />} />
+        <GenTable columns={columns} data={courses} searchId="Course name" rightComponent={<AddCourse refreshCourses={fetchCourses} />} />
     )
 }
