@@ -4,6 +4,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
+import responses from './response.ts';
 
 console.log(`Function "browser-with-cors" up and running!`);
 
@@ -16,7 +17,7 @@ serve(async (req: Request): Promise<Response> => {
   try {
     const { name } = await req.json();
     const data = {
-      message: `Hello ${name}!`,
+      message: `${responses.message} ${name}`,
     };
 
     return new Response(JSON.stringify(data), {
