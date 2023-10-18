@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "gen-type": "npx supabase gen types typescript --project-id eloywarkrkqtgizqqfgv --schema public > types/supabase.ts",
-    "deno": "deno run --allow-net supabase/functions/$function/index.ts"
+    "deno": "deno run --allow-net supabase/functions/actions/index.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

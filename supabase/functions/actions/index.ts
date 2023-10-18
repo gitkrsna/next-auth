@@ -11,8 +11,8 @@ serve(async (req: Request): Promise<Response> => {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  const { body } = await req.json();
-  const { actionName } = body || {};
+  const body = await req.json();
+  const { actionName } = body;
 
   if (!Object.keys(ACTIONS).includes(actionName)) {
     return new Response(JSON.stringify({ error: 'action name not valid' }), {

@@ -143,8 +143,7 @@ const AddTeacher = ({
     (async () => {
       const response = supabase.functions.invoke('actions', {
         body: {
-          name: 'Krishna',
-          actionName: 'CREATE_TEACHERS',
+          actionName: 'BULK_CREATE_STUDENT',
         },
       });
       console.log({ response });
