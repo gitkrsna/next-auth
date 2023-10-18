@@ -4,20 +4,27 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
-import responses from './response.ts';
-
-console.log(`Function "browser-with-cors" up and running!`);
+import ACTIONS from './listActions.ts';
 
 serve(async (req: Request): Promise<Response> => {
-  // This is needed if you're planning to invoke your function from a browser.
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  const { body } = await req.json();
+  const { actionName } = body || {};
+
+  if (!Object.keys(ACTIONS).includes(actionName)) {
+    return new Response(JSON.stringify({ error: 'action name not valid' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400,
+    });
+  }
+
   try {
-    const { name } = await req.json();
+    const NAME: keyof typeof ACTIONS = actionName;
     const data = {
-      message: `${responses.message} ${name}`,
+      message: await ACTIONS[NAME](req),
     };
 
     return new Response(JSON.stringify(data), {
@@ -31,9 +38,3 @@ serve(async (req: Request): Promise<Response> => {
     });
   }
 });
-
-// To invoke:
-// curl -i --location --request POST 'http://localhost:54321/functions/v1/' \
-//   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-//   --header 'Content-Type: application/json' \
-//   --data '{"name":"Functions"}'
