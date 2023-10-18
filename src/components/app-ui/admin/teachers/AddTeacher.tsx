@@ -3,12 +3,12 @@
 import GenForm from '@/components/shared-ui/GenForm';
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
@@ -141,9 +141,10 @@ const AddTeacher = ({
   useEffect(() => {
     const supabase = createClientComponentClient<Database>();
     (async () => {
-      const response = supabase.functions.invoke('add_teachers', {
+      const response = supabase.functions.invoke('actions', {
         body: {
           name: 'Krishna',
+          actionName: 'CREATE_TEACHERS',
         },
       });
       console.log({ response });
