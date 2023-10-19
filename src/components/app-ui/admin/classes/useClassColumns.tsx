@@ -26,23 +26,23 @@ const useClassColumns = ({
 }) => {
   const columns: ColumnDef<Class>[] = [
     {
-      id: 'Class name',
+      id: 'Class Name',
       accessorFn: (originalRow) => {
         return originalRow?.name;
       },
-      header: 'Class name',
+      header: 'Class Name',
       cell: ({ renderValue }) => (
         <div className='lowercase'>{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'Class teacher',
+      id: 'Class Teacher',
       accessorFn: (originalRow) => {
         const { user } = originalRow;
         const { first_name, last_name } = user || {};
         return `${first_name} ${last_name}`;
       },
-      header: 'Class teacher',
+      header: 'Class Teacher',
       cell: ({ renderValue }) => (
         <div className='capitalize'>{renderValue() as ReactNode}</div>
       ),
