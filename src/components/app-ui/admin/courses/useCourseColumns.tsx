@@ -41,7 +41,7 @@ const useCourseColumns = ({ refreshCourses, deleteCourse }: { refreshCourses: ()
                 )
             },
             cell: ({ renderValue }) => (
-                <div className="capitalize">{renderValue() as ReactNode}</div>
+                <div className="ml-4">{renderValue() as ReactNode}</div>
             ),
         },
         {

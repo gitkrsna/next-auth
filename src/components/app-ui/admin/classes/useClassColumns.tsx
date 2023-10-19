@@ -31,9 +31,7 @@ const useClassColumns = ({
         return originalRow?.name;
       },
       header: 'Class Name',
-      cell: ({ renderValue }) => (
-        <div className='lowercase'>{renderValue() as ReactNode}</div>
-      ),
+      cell: ({ renderValue }) => <div>{renderValue() as ReactNode}</div>,
     },
     {
       id: 'Class Teacher',
