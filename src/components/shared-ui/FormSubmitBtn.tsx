@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from '@/components/ui/button';
 import { ReloadIcon } from "@radix-ui/react-icons";
 interface FormSubmitBtnProps {
   isSubmitting: boolean;

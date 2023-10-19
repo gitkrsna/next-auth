@@ -1,6 +1,6 @@
-import { TrashIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { Button } from "../ui/button";
+import { TrashIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 interface DeleteBtnProps {
   onClick: () => Promise<void>;
 }
@@ -16,7 +16,7 @@ const DeleteBtn = ({ onClick }: DeleteBtnProps) => {
     <Button disabled={isDeleting} onClick={deleteClickHandler}>
       Delete
       <TrashIcon
-        className={`ml-2 h-4 w-4 ${isDeleting ? "animate-ping" : ""} `}
+        className={`ml-2 h-4 w-4 ${isDeleting ? 'animate-ping' : ''} `}
       />
     </Button>
   );
