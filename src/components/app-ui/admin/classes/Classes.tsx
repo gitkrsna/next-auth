@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import GenTable from '@/components/shared-ui/GenTable';
-import { useToast } from '@/components/ui/use-toast';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from 'types/supabase';
-import { Class } from 'types/tableTypes';
-import AddClass from './AddClass';
-import useClassColumns from './useClassColumns';
+import * as React from "react";
+import GenTable from "@/components/shared-ui/GenTable";
+import { useToast } from "@/components/ui/use-toast";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "types/supabase";
+import { Class } from "types/tableTypes";
+import AddClass from "./AddClass";
+import useClassColumns from "./useClassColumns";
 
 export function Classes() {
   const { toast } = useToast();
@@ -18,9 +18,9 @@ export function Classes() {
     const supabase = createClientComponentClient<Database>();
 
     const { data, error } = await supabase
-      .from('classes')
+      .from("classes")
       .select(
-        'id, name, start_time, end_time, day_of_week, room, created_at, user(id, first_name, last_name), courses(id, name)'
+        "id, name, start_time, end_time, day_of_week, room, created_at, user(id, first_name, last_name), courses(id, name)",
       );
 
     !error && setClasses(data as Class[]);
@@ -29,18 +29,18 @@ export function Classes() {
   const deleteClass = async (record: Class) => {
     const supabase = createClientComponentClient<Database>();
     const { error } = await supabase
-      .from('classes')
+      .from("classes")
       .delete()
-      .eq('id', record.id);
+      .eq("id", record.id);
     if (!error) {
       toast({
-        description: 'Class deleted successfully',
+        description: "Class deleted successfully",
       });
       fetchClasses();
     } else {
       toast({
-        variant: 'destructive',
-        description: 'Something went wrong, please try again later',
+        variant: "destructive",
+        description: "Something went wrong, please try again later",
       });
     }
   };
@@ -58,7 +58,7 @@ export function Classes() {
     <GenTable
       columns={columns}
       data={classes}
-      searchId='Class name'
+      searchId="Class name"
       rightComponent={<AddClass refreshClasses={fetchClasses} />}
     />
   );

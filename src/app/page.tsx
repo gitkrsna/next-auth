@@ -1,12 +1,12 @@
-'use client';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useEffect } from 'react';
-import { Database } from 'types/supabase';
+"use client";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect } from "react";
+import { Database } from "types/supabase";
 
 export default function Home() {
   useEffect(() => {
     window.location.href = "/admin/course-management";
-  }, [])
+  }, []);
 
   return (
     // <div className="row">
@@ -24,7 +24,6 @@ export default function Home() {
     // </div>
 
     <>
-
       {/* <AuthForm /> */}
       {/* <StaffNav /> */}
       {/* <ProfileForm />
@@ -33,5 +32,5 @@ export default function Home() {
       {/* <AdminNav /> */}
       {/* <StudentNav /> */}
     </>
-  )
+  );
 }

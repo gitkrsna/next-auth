@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { ColumnDef } from '@tanstack/react-table';
+import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import AddClass from './AddClass';
-import { Class, Course, User } from 'types/tableTypes';
-import DeleteConfimModal from '@/components/shared-ui/DeleteConfimModal';
-import { ReactNode } from 'react';
+} from "@/components/ui/dropdown-menu";
+import AddClass from "./AddClass";
+import { Class, Course, User } from "types/tableTypes";
+import DeleteConfimModal from "@/components/shared-ui/DeleteConfimModal";
+import { ReactNode } from "react";
 
 const useClassColumns = ({
   refreshClasses,
@@ -26,78 +26,78 @@ const useClassColumns = ({
 }) => {
   const columns: ColumnDef<Class>[] = [
     {
-      id: 'Class Name',
+      id: "Class Name",
       accessorFn: (originalRow) => {
         return originalRow?.name;
       },
-      header: 'Class Name',
+      header: "Class Name",
       cell: ({ renderValue }) => <div>{renderValue() as ReactNode}</div>,
     },
     {
-      id: 'Class Teacher',
+      id: "Class Teacher",
       accessorFn: (originalRow) => {
         const { user } = originalRow;
         const { first_name, last_name } = user || {};
         return `${first_name} ${last_name}`;
       },
-      header: 'Class Teacher',
+      header: "Class Teacher",
       cell: ({ renderValue }) => (
-        <div className='capitalize'>{renderValue() as ReactNode}</div>
+        <div className="capitalize">{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'Course Name',
+      id: "Course Name",
       accessorFn: (originalRow) => {
         return originalRow?.courses?.name;
       },
-      header: 'Course Name',
+      header: "Course Name",
       cell: ({ renderValue }) => (
-        <div className='capitalize'>{renderValue() as ReactNode}</div>
+        <div className="capitalize">{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'Days',
+      id: "Days",
       accessorFn: (originalRow) => {
-        return JSON.parse(originalRow.day_of_week ?? '[]').join(',');
+        return JSON.parse(originalRow.day_of_week ?? "[]").join(",");
       },
-      header: 'Days',
+      header: "Days",
       cell: ({ renderValue }) => (
-        <div className='lowercase'>{renderValue() as ReactNode}</div>
+        <div className="lowercase">{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'Room',
+      id: "Room",
       accessorFn: (originalRow) => {
         return originalRow.room;
       },
-      header: 'Room',
+      header: "Room",
       cell: ({ renderValue }) => (
-        <div className='lowercase'>{renderValue() as ReactNode}</div>
+        <div className="lowercase">{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'Timing',
+      id: "Timing",
       accessorFn: (originalRow) => {
         return `${originalRow.start_time} - ${originalRow.end_time}`;
       },
-      header: 'Timing',
+      header: "Timing",
       cell: ({ renderValue }) => (
-        <div className='lowercase'>{renderValue() as ReactNode}</div>
+        <div className="lowercase">{renderValue() as ReactNode}</div>
       ),
     },
     {
-      id: 'actions',
+      id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='h-8 w-8 p-0'>
-                <span className='sr-only'>Open menu</span>
-                <DotsHorizontalIcon className='h-4 w-4' />
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild>
                 <AddClass
@@ -108,7 +108,7 @@ const useClassColumns = ({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <DeleteConfimModal
-                  title='Delete class'
+                  title="Delete class"
                   description={`Are you sure, you want to delete this class?`}
                   onConfirm={() => deleteClass(row.original)}
                 />

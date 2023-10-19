@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.4",
+    "prettier": "3.0.3",
     "supabase": "^1.88.0"
   }
 }

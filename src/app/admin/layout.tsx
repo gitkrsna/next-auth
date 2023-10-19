@@ -1,47 +1,48 @@
-import { NavMenu, NavMenuItem } from '@/components/shared-ui/NavMenu'
-import React from 'react'
+import { NavMenu, NavMenuItem } from "@/components/shared-ui/NavMenu";
+import React from "react";
 
-const layout = ({ children }: {
-    children: React.ReactNode
-}) => {
-    const menuItems: NavMenuItem[] = [
-        {
-            "trigger": "Course",
-            "content": "/admin/course-management",
-        },
-        {
-            "trigger": "Subject",
-            "content": "/admin/subject-management",
-        },
-        {
-            "trigger": "Teacher",
-            "content": "/admin/teacher-management",
-        },
-        {
-            "trigger": "Class",
-            "content": "/admin/class-management",
-        },
-        {
-            "trigger": "Time Table",
-            "content": "/admin/timetable-management",
-        }]
+const layout = ({ children }: { children: React.ReactNode }) => {
+  const menuItems: NavMenuItem[] = [
+    {
+      trigger: "Course",
+      content: "/admin/course-management",
+    },
+    {
+      trigger: "Subject",
+      content: "/admin/subject-management",
+    },
+    {
+      trigger: "Teacher",
+      content: "/admin/teacher-management",
+    },
+    {
+      trigger: "Class",
+      content: "/admin/class-management",
+    },
+    {
+      trigger: "Time Table",
+      content: "/admin/timetable-management",
+    },
+  ];
 
-    return (
+  return (
+    <div>
+      <div className="px-10 py-5 flex justify-between">
+        <NavMenu
+          defaultValue="/admin/course-management"
+          navMenuItems={menuItems}
+        />
         <div>
-            <div className='px-10 py-5 flex justify-between'>
-                <NavMenu defaultValue='/admin/course-management' navMenuItems={menuItems} />
-                <div>
-                    <form action="/auth/signout" method="post">
-                        <button className="button block hover:font-bold" type="submit">
-                            Sign out
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {children}
+          <form action="/auth/signout" method="post">
+            <button className="button block hover:font-bold" type="submit">
+              Sign out
+            </button>
+          </form>
         </div>
+      </div>
+      {children}
+    </div>
+  );
+};
 
-    )
-}
-
-export default layout
+export default layout;

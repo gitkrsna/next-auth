@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import GenForm from '@/components/shared-ui/GenForm';
-import { Button } from '@/components/ui/button';
+import GenForm from "@/components/shared-ui/GenForm";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,34 +9,34 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { useToast } from '@/components/ui/use-toast';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useEffect, useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { FormFieldType, SelectOption } from 'types/appTypes';
-import { Database } from 'types/supabase';
-import { Class } from 'types/tableTypes';
-import { v4 } from 'uuid';
-import * as z from 'zod';
+} from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { FormFieldType, SelectOption } from "types/appTypes";
+import { Database } from "types/supabase";
+import { Class } from "types/tableTypes";
+import { v4 } from "uuid";
+import * as z from "zod";
 
 const formSchema = z
   .object({
     id: z.string(),
-    name: z.string().nonempty('Field required'),
-    start_time: z.string().nonempty('Field required'),
-    end_time: z.string().nonempty('Field required'),
-    day_of_week: z.string().array().nonempty('Field required'),
-    room: z.string().nonempty('Field required'),
+    name: z.string().nonempty("Field required"),
+    start_time: z.string().nonempty("Field required"),
+    end_time: z.string().nonempty("Field required"),
+    day_of_week: z.string().array().nonempty("Field required"),
+    room: z.string().nonempty("Field required"),
     created_at: z.string().or(z.null()),
     user: z.object({
-      id: z.string().nonempty('Field required'),
+      id: z.string().nonempty("Field required"),
     }),
     courses: z.object({
-      id: z.string().nonempty('Field required'),
+      id: z.string().nonempty("Field required"),
     }),
   })
   .refine(
@@ -44,14 +44,14 @@ const formSchema = z
       return data.start_time < data.end_time;
     },
     {
-      message: 'End time cannot be earlier than start time.',
-      path: ['end_time'],
-    }
+      message: "End time cannot be earlier than start time.",
+      path: ["end_time"],
+    },
   );
 
 interface AddClassProps {
   isEditing?: boolean;
-  initialValues?: Omit<Class, 'user' | 'courses'> & { user: { id: string } } & {
+  initialValues?: Omit<Class, "user" | "courses"> & { user: { id: string } } & {
     courses: { id: string };
   };
   refreshClasses?: () => void;
@@ -60,21 +60,21 @@ interface AddClassProps {
 const AddClass = ({
   isEditing = false,
   initialValues = {
-    id: '',
-    start_time: '',
-    end_time: '',
-    day_of_week: '',
-    room: '',
+    id: "",
+    start_time: "",
+    end_time: "",
+    day_of_week: "",
+    room: "",
     created_at: null,
     user: {
-      id: '',
+      id: "",
     },
     courses: {
-      id: '',
+      id: "",
     },
-    name: '',
-    course_id: '',
-    teacher_id: '',
+    name: "",
+    course_id: "",
+    teacher_id: "",
   },
   refreshClasses,
 }: AddClassProps) => {
@@ -91,36 +91,36 @@ const AddClass = ({
 
   const weekdaysOptions: SelectOption[] = [
     {
-      label: 'Mon',
-      value: 'Mon',
+      label: "Mon",
+      value: "Mon",
     },
     {
-      label: 'Tue',
-      value: 'Tue',
+      label: "Tue",
+      value: "Tue",
     },
     {
-      label: 'Wed',
-      value: 'Wed',
+      label: "Wed",
+      value: "Wed",
     },
     {
-      label: 'Thu',
-      value: 'Thu',
+      label: "Thu",
+      value: "Thu",
     },
     {
-      label: 'Fri',
-      value: 'Fri',
+      label: "Fri",
+      value: "Fri",
     },
     {
-      label: 'Sat',
-      value: 'Sat',
+      label: "Sat",
+      value: "Sat",
     },
   ];
   const fetchTeachers = async () => {
     const supabase = createClientComponentClient<Database>();
 
     const { data, error } = await supabase
-      .from('teacher')
-      .select('user(id, first_name, last_name)');
+      .from("teacher")
+      .select("user(id, first_name, last_name)");
 
     if (!error) {
       const teacherOptions = (data || []).map(({ user }) => ({
@@ -134,7 +134,7 @@ const AddClass = ({
   const fetchCourses = async () => {
     const supabase = createClientComponentClient<Database>();
 
-    const { data, error } = await supabase.from('courses').select('id, name');
+    const { data, error } = await supabase.from("courses").select("id, name");
 
     if (!error) {
       const courseOptions = (data || []).map(({ id, name }) => ({
@@ -152,40 +152,40 @@ const AddClass = ({
 
   const fields: FormFieldType[] = [
     {
-      name: 'name',
-      label: 'Class name',
+      name: "name",
+      label: "Class name",
     },
     {
-      name: 'courses.id',
-      label: 'Select Course',
-      fieldType: 'searchableSelect',
+      name: "courses.id",
+      label: "Select Course",
+      fieldType: "searchableSelect",
       options: courses,
     },
     {
-      name: 'user.id',
-      label: 'Select Teacher',
+      name: "user.id",
+      label: "Select Teacher",
       options: teachers,
-      fieldType: 'searchableSelect',
+      fieldType: "searchableSelect",
     },
     {
-      name: 'start_time',
-      label: 'Start Time',
-      controlType: 'time',
+      name: "start_time",
+      label: "Start Time",
+      controlType: "time",
     },
     {
-      name: 'end_time',
-      label: 'End Time',
-      controlType: 'time',
+      name: "end_time",
+      label: "End Time",
+      controlType: "time",
     },
     {
-      name: 'day_of_week',
-      label: 'Days of Week',
+      name: "day_of_week",
+      label: "Days of Week",
       options: weekdaysOptions,
-      fieldType: 'multiSelect',
+      fieldType: "multiSelect",
     },
     {
-      name: 'room',
-      label: 'Room No.',
+      name: "room",
+      label: "Room No.",
     },
   ];
 
@@ -204,24 +204,24 @@ const AddClass = ({
     };
     if (isEditing) {
       const { error: classUpdateFailed } = await supabase
-        .from('classes')
+        .from("classes")
         .update(payload)
-        .eq('id', classesData.id);
+        .eq("id", classesData.id);
       if (classUpdateFailed) {
         showError();
         return;
       }
 
-      showSuccess('Class updated successfully');
+      showSuccess("Class updated successfully");
     } else {
       const id = v4();
       const { error: userCreationFailed } = await supabase
-        .from('classes')
+        .from("classes")
         .insert({
           ...payload,
           id,
         })
-        .select('*');
+        .select("*");
 
       if (userCreationFailed) {
         setIsSubmitting(false);
@@ -229,7 +229,7 @@ const AddClass = ({
         return;
       }
 
-      showSuccess('Class created successfully');
+      showSuccess("Class created successfully");
     }
 
     refreshClasses?.();
@@ -245,8 +245,8 @@ const AddClass = ({
 
   function showError() {
     toast({
-      variant: 'destructive',
-      description: 'Something went wrong, please try again later.',
+      variant: "destructive",
+      description: "Something went wrong, please try again later.",
     });
   }
 
@@ -258,14 +258,14 @@ const AddClass = ({
             Edit
           </DropdownMenuItem>
         ) : (
-          <Button className='ml-5'>
-            Add Class <PlusIcon className='ml-2 h-4 w-4' />
+          <Button className="ml-5">
+            Add Class <PlusIcon className="ml-2 h-4 w-4" />
           </Button>
         )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit' : 'Add'} class</DialogTitle>
+          <DialogTitle>{isEditing ? "Edit" : "Add"} class</DialogTitle>
           <DialogDescription>
             Add changes to class here. Click save when you&apos;re done.
           </DialogDescription>
