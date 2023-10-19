@@ -23,21 +23,31 @@ import { Class } from 'types/tableTypes';
 import { v4 } from 'uuid';
 import * as z from 'zod';
 
-const formSchema = z.object({
-  id: z.string(),
-  name: z.string().nonempty('Field required'),
-  start_time: z.string().nonempty('Field required'),
-  end_time: z.string().nonempty('Field required'),
-  day_of_week: z.string().array().nonempty('Field required'),
-  room: z.string().nonempty('Field required'),
-  created_at: z.string().or(z.null()),
-  user: z.object({
-    id: z.string().nonempty('Field required'),
-  }),
-  courses: z.object({
-    id: z.string().nonempty('Field required'),
-  }),
-});
+const formSchema = z
+  .object({
+    id: z.string(),
+    name: z.string().nonempty('Field required'),
+    start_time: z.string().nonempty('Field required'),
+    end_time: z.string().nonempty('Field required'),
+    day_of_week: z.string().array().nonempty('Field required'),
+    room: z.string().nonempty('Field required'),
+    created_at: z.string().or(z.null()),
+    user: z.object({
+      id: z.string().nonempty('Field required'),
+    }),
+    courses: z.object({
+      id: z.string().nonempty('Field required'),
+    }),
+  })
+  .refine(
+    (data) => {
+      return data.start_time < data.end_time;
+    },
+    {
+      message: 'End time cannot be earlier than start time.',
+      path: ['end_time'],
+    }
+  );
 
 interface AddClassProps {
   isEditing?: boolean;
