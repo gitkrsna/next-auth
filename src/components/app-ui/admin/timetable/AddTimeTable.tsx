@@ -1,7 +1,13 @@
-"use client";
+'use client';
 
-import GenForm from "@/components/shared-ui/GenForm";
-import { Button } from "@/components/ui/button";
+import FormSubmitBtn from '@/components/shared-ui/FormSubmitBtn';
+import GenDatePicker from '@/components/shared-ui/GenDatePicker';
+import GenForm from '@/components/shared-ui/GenForm';
+import GenInput from '@/components/shared-ui/GenInput';
+import { GenSearchableMultiSelect } from '@/components/shared-ui/GenSearchableMultiSelect';
+import GenSearchableSelect from '@/components/shared-ui/GenSearchableSelect';
+import GenSelect from '@/components/shared-ui/GenSelect';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,57 +15,113 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { FormFieldType, SelectOption } from "types/appTypes";
-import { Database } from "types/supabase";
-import { TimeTable, Teacher } from "types/tableTypes";
-import { v4 } from "uuid";
-import * as z from "zod";
+} from '@/components/ui/dialog';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import {
+  Form,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useToast } from '@/components/ui/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Delete, Plus, Trash2Icon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import { FormFieldType, SelectOption } from 'types/appTypes';
+import { Database } from 'types/supabase';
+import { TimeTable, Teacher } from 'types/tableTypes';
+import { v4 } from 'uuid';
+import * as z from 'zod';
 
-const formSchema = z
-  .object({
-    id: z.string(),
-    start_time: z.string().nonempty("Field required"),
-    end_time: z.string().nonempty("Field required"),
-    day_of_week: z.string().array().nonempty("Field required"),
-    class_id: z.string().nonempty("Field required"),
-    subject_id: z.string().nonempty("Field required"),
-    teacher_id: z.string().nonempty("Field required"),
-    created_at: z.string().or(z.null()),
-  })
-  .refine(
-    (data) => {
-      return data.start_time < data.end_time;
-    },
-    {
-      message: "End time cannot be earlier than start time.",
-      path: ["end_time"],
-    },
-  );
+const weekdaysOptions: SelectOption[] = [
+  {
+    label: 'Mon',
+    value: 'Mon',
+  },
+  {
+    label: 'Tue',
+    value: 'Tue',
+  },
+  {
+    label: 'Wed',
+    value: 'Wed',
+  },
+  {
+    label: 'Thu',
+    value: 'Thu',
+  },
+  {
+    label: 'Fri',
+    value: 'Fri',
+  },
+  {
+    label: 'Sat',
+    value: 'Sat',
+  },
+];
+
+const formSchema = z.object({
+  id: z.string(),
+  class_id: z.string().nonempty('Field required'),
+  class_time_table: z.array(
+    z.object({
+      subject_id: z.string().nonempty('Field required'),
+      teacher_id: z.string().nonempty('Field required'),
+      start_time: z.string().nonempty('Field required'),
+      end_time: z.string().nonempty('Field required'),
+      day_of_week: z.string().array().nonempty('Field required'),
+    })
+  ),
+  created_at: z.string().or(z.null()),
+});
+// .refine(
+//   (data) => {
+//     return data.start_time < data.end_time;
+//   },
+//   {
+//     message: 'End time cannot be earlier than start time.',
+//     path: ['end_time'],
+//   }
+// );
+
+interface ClassTimeTable {
+  id: string;
+  class_id: string;
+  class_time_table: {
+    start_time: string;
+    end_time: string;
+    day_of_week: string;
+    subject_id: string;
+    teacher_id: string;
+  }[];
+  created_at: string | null;
+}
 
 interface AddTimeTableProps {
   isEditing?: boolean;
-  initialValues?: Omit<TimeTable, "teacher" | "classes" | "subjects">;
+  initialValues?: ClassTimeTable;
   refreshTimeTables?: () => void;
 }
 
 const AddTimeTable = ({
   isEditing = false,
   initialValues = {
-    id: "",
-    start_time: "",
-    end_time: "",
-    day_of_week: "",
-    class_id: "",
-    subject_id: "",
-    teacher_id: "",
+    id: '',
+    class_id: '',
+    class_time_table: [
+      {
+        start_time: '',
+        end_time: '',
+        day_of_week: '',
+        subject_id: '',
+        teacher_id: '',
+      },
+    ],
     created_at: null,
   },
   refreshTimeTables,
@@ -75,39 +137,13 @@ const AddTimeTable = ({
   const [teachers, setTeachers] = useState<SelectOption[]>([]);
   const [classes, setClasses] = useState<SelectOption[]>([]);
   const [subjects, setSubjects] = useState<SelectOption[]>([]);
-  const weekdaysOptions: SelectOption[] = [
-    {
-      label: "Mon",
-      value: "Mon",
-    },
-    {
-      label: "Tue",
-      value: "Tue",
-    },
-    {
-      label: "Wed",
-      value: "Wed",
-    },
-    {
-      label: "Thu",
-      value: "Thu",
-    },
-    {
-      label: "Fri",
-      value: "Fri",
-    },
-    {
-      label: "Sat",
-      value: "Sat",
-    },
-  ];
 
   const fetchTeachers = async () => {
     const supabase = createClientComponentClient<Database>();
 
     const { data, error } = await supabase
-      .from("teacher")
-      .select("id, user(id, first_name, last_name)");
+      .from('teacher')
+      .select('id, user(id, first_name, last_name)');
 
     if (!error) {
       const teacherOptions = (data || []).map(({ id, user }) => ({
@@ -121,7 +157,7 @@ const AddTimeTable = ({
   const fetchClasses = async () => {
     const supabase = createClientComponentClient<Database>();
 
-    const { data, error } = await supabase.from("classes").select("id, name");
+    const { data, error } = await supabase.from('classes').select('id, name');
 
     if (!error) {
       const classOptions = (data || []).map(({ id, name }) => ({
@@ -135,7 +171,7 @@ const AddTimeTable = ({
   const fetchSubject = async () => {
     const supabase = createClientComponentClient<Database>();
 
-    const { data, error } = await supabase.from("subjects").select("id, name");
+    const { data, error } = await supabase.from('subjects').select('id, name');
 
     if (!error) {
       const subjectOptions = (data || []).map(({ id, name }) => ({
@@ -152,42 +188,57 @@ const AddTimeTable = ({
     fetchSubject();
   }, []);
 
-  const fields: FormFieldType[] = [
-    {
-      name: "class_id",
-      label: "Select Class",
-      fieldType: "searchableSelect",
-      options: classes,
-    },
-    {
-      name: "teacher_id",
-      label: "Select Teacher",
-      options: teachers,
-      fieldType: "searchableSelect",
-    },
-    {
-      name: "subject_id",
-      label: "Select Subject",
-      options: subjects,
-      fieldType: "searchableSelect",
-    },
-    {
-      name: "start_time",
-      label: "Start Time",
-      controlType: "time",
-    },
-    {
-      name: "end_time",
-      label: "End Time",
-      controlType: "time",
-    },
-    {
-      name: "day_of_week",
-      label: "Days of Week",
-      options: weekdaysOptions,
-      fieldType: "multiSelect",
-    },
-  ];
+  const addFieldRow = (rowIndex: number) => {
+    const newFields: FormFieldType[] = [
+      {
+        name: `teacher_id_${rowIndex}`,
+        label: 'Select Teacher',
+        options: teachers,
+        fieldType: 'searchableSelect',
+      },
+      {
+        name: `subject_id_${rowIndex}`,
+        label: 'Select Subject',
+        options: subjects,
+        fieldType: 'searchableSelect',
+      },
+      {
+        name: `start_time_${rowIndex}`,
+        label: 'Start Time',
+        controlType: 'time',
+      },
+      {
+        name: `end_time_${rowIndex}`,
+        label: 'End Time',
+        controlType: 'time',
+      },
+      {
+        name: `day_of_week_${rowIndex}`,
+        label: 'Days of Week',
+        options: weekdaysOptions,
+        fieldType: 'multiSelect',
+      },
+    ];
+    setFields((prevFields) => [...prevFields, newFields]);
+    lastRowIndex.current += 1;
+  };
+
+  useEffect(() => {
+    if (teachers.length > 0 && subjects.length > 0) {
+      addFieldRow(0);
+    }
+  }, [subjects, teachers]);
+
+  const [fields, setFields] = useState<(FormFieldType | FormFieldType[])[]>([]);
+
+  const removeFieldRow = (rowIndex: number) => {
+    if (rowIndex === 0 && lastRowIndex.current == 0) return;
+    setFields((prevFields) => [
+      ...prevFields.slice(0, rowIndex),
+      ...prevFields.slice(rowIndex + 1),
+    ]);
+    lastRowIndex.current -= 1;
+  };
 
   // useEffect(() => {
   //     open && form.reset()
@@ -199,24 +250,24 @@ const AddTimeTable = ({
 
     if (isEditing) {
       const { error: timeTableUpdateFailed } = await supabase
-        .from("timetable")
+        .from('timetable')
         .update(values)
-        .eq("id", values.id);
+        .eq('id', values.id);
       if (timeTableUpdateFailed) {
         showError();
         return;
       }
 
-      showSuccess("TimeTable updated successfully");
+      showSuccess('TimeTable updated successfully');
     } else {
       const id = v4();
       const { error: timetableCreationFailed } = await supabase
-        .from("timetable")
+        .from('timetable')
         .insert({
           ...values,
           id,
         })
-        .select("*");
+        .select('*');
 
       if (timetableCreationFailed) {
         setIsSubmitting(false);
@@ -224,7 +275,7 @@ const AddTimeTable = ({
         return;
       }
 
-      showSuccess("TimeTable created successfully");
+      showSuccess('TimeTable created successfully');
     }
 
     refreshTimeTables?.();
@@ -240,11 +291,78 @@ const AddTimeTable = ({
 
   function showError() {
     toast({
-      variant: "destructive",
-      description: "Something went wrong, please try again later.",
+      variant: 'destructive',
+      description: 'Something went wrong, please try again later.',
     });
   }
 
+  const lastRowIndex = useRef<number>(-1);
+
+  const FormFieldComponent = ({
+    name,
+    label,
+    placeholder = '',
+    description = '',
+    fieldType = 'input',
+    controlType = 'text',
+    options,
+  }: FormFieldType) => (
+    <FormField
+      key={name}
+      control={form.control}
+      name={name}
+      render={({ field }) => {
+        return (
+          <FormItem>
+            <FormLabel>{label}</FormLabel>
+            {fieldType == 'input' && (
+              <GenInput
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                field={field}
+                controlType={controlType}
+              />
+            )}
+            {fieldType == 'datepicker' && (
+              <GenDatePicker
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                field={field}
+              />
+            )}
+            {fieldType == 'select' && (
+              <GenSelect
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                field={field}
+                options={options}
+              />
+            )}
+            {fieldType == 'searchableSelect' && (
+              <GenSearchableSelect
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                field={field}
+                options={options}
+                form={form}
+              />
+            )}
+            {fieldType == 'multiSelect' && (
+              <GenSearchableMultiSelect
+                disabled={isSubmitting}
+                placeholder={placeholder}
+                field={field}
+                options={options}
+                form={form}
+              />
+            )}
+            <FormDescription>{description}</FormDescription>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
+  );
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -253,24 +371,55 @@ const AddTimeTable = ({
             Edit
           </DropdownMenuItem>
         ) : (
-          <Button className="ml-5">
-            Add TimeTable <PlusIcon className="ml-2 h-4 w-4" />
+          <Button className='ml-5'>
+            Add TimeTable <PlusIcon className='ml-2 h-4 w-4' />
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='max-w-[60%]'>
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit" : "Add"} timeTable</DialogTitle>
+          <DialogTitle>{isEditing ? 'Edit' : 'Add'} timeTable</DialogTitle>
           <DialogDescription>
             Add changes to timeTable here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <GenForm
+        {/* <GenForm
           form={form}
           isSubmitting={isSubmitting}
           fields={fields}
           onSubmit={onSubmit}
-        />
+        /> */}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit, console.log)}
+            className='space-y-8'
+          >
+            {fields.map((field, index) =>
+              Array.isArray(field) ? (
+                <>
+                  <div key={index} className='flex gap-12'>
+                    <div className='flex gap-12'>
+                      {field.map((subField) => (
+                        <FormFieldComponent key={subField.name} {...subField} />
+                      ))}
+                    </div>
+                    <div>
+                      {lastRowIndex.current == index ? (
+                        <Plus onClick={() => addFieldRow(index)} />
+                      ) : (
+                        <Trash2Icon onClick={() => removeFieldRow(index)} />
+                      )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <FormFieldComponent key={field.name} {...field} />
+              )
+            )}
+
+            <FormSubmitBtn isSubmitting={isSubmitting} />
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
