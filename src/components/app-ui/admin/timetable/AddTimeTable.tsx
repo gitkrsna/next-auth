@@ -188,56 +188,53 @@ const AddTimeTable = ({
     fetchSubject();
   }, []);
 
-  const addFieldRow = (rowIndex: number) => {
+  const addFieldRow = (fieldKey: string) => {
     const newFields: FormFieldType[] = [
       {
-        name: `teacher_id_${rowIndex}`,
+        name: `start_time_${fieldKey}`,
+        label: 'Start Time',
+        controlType: 'time',
+      },
+      {
+        name: `end_time_${fieldKey}`,
+        label: 'End Time',
+        controlType: 'time',
+      },
+      {
+        name: `teacher_id_${fieldKey}`,
         label: 'Select Teacher',
         options: teachers,
         fieldType: 'searchableSelect',
       },
       {
-        name: `subject_id_${rowIndex}`,
+        name: `subject_id_${fieldKey}`,
         label: 'Select Subject',
         options: subjects,
         fieldType: 'searchableSelect',
       },
       {
-        name: `start_time_${rowIndex}`,
-        label: 'Start Time',
-        controlType: 'time',
-      },
-      {
-        name: `end_time_${rowIndex}`,
-        label: 'End Time',
-        controlType: 'time',
-      },
-      {
-        name: `day_of_week_${rowIndex}`,
+        name: `day_of_week_${fieldKey}`,
         label: 'Days of Week',
         options: weekdaysOptions,
         fieldType: 'multiSelect',
       },
     ];
-    setFields((prevFields) => [...prevFields, newFields]);
-    lastRowIndex.current += 1;
+    setFields((prevFields) => [newFields, ...prevFields]);
   };
 
   useEffect(() => {
     if (teachers.length > 0 && subjects.length > 0) {
-      addFieldRow(0);
+      addFieldRow(v4());
     }
   }, [subjects, teachers]);
 
   const [fields, setFields] = useState<(FormFieldType | FormFieldType[])[]>([]);
 
   const removeFieldRow = (rowIndex: number) => {
-    if (rowIndex === 0 && lastRowIndex.current == 0) return;
     setFields((prevFields) => [
       ...prevFields.slice(0, rowIndex),
       ...prevFields.slice(rowIndex + 1),
     ]);
-    lastRowIndex.current -= 1;
   };
 
   // useEffect(() => {
@@ -295,8 +292,6 @@ const AddTimeTable = ({
       description: 'Something went wrong, please try again later.',
     });
   }
-
-  const lastRowIndex = useRef<number>(-1);
 
   const FormFieldComponent = ({
     name,
@@ -364,64 +359,39 @@ const AddTimeTable = ({
     />
   );
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {isEditing ? (
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            Edit
-          </DropdownMenuItem>
-        ) : (
-          <Button className='ml-5'>
-            Add TimeTable <PlusIcon className='ml-2 h-4 w-4' />
-          </Button>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit, console.log)}
+        className='space-y-8'
+      >
+        {fields.map((field, index) =>
+          Array.isArray(field) ? (
+            <>
+              <div key={index} className='flex gap-12'>
+                <div className='flex gap-24 flex-wrap'>
+                  {field.map((subField) => (
+                    <div key={subField.name} className='max-w-[200px]'>
+                      <FormFieldComponent key={subField.name} {...subField} />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  {index == 0 ? (
+                    <Plus onClick={() => addFieldRow(v4())} />
+                  ) : (
+                    <Trash2Icon onClick={() => removeFieldRow(index)} />
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <FormFieldComponent key={field.name} {...field} />
+          )
         )}
-      </DialogTrigger>
-      <DialogContent className='max-w-[60%]'>
-        <DialogHeader>
-          <DialogTitle>{isEditing ? 'Edit' : 'Add'} timeTable</DialogTitle>
-          <DialogDescription>
-            Add changes to timeTable here. Click save when you&apos;re done.
-          </DialogDescription>
-        </DialogHeader>
-        {/* <GenForm
-          form={form}
-          isSubmitting={isSubmitting}
-          fields={fields}
-          onSubmit={onSubmit}
-        /> */}
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, console.log)}
-            className='space-y-8'
-          >
-            {fields.map((field, index) =>
-              Array.isArray(field) ? (
-                <>
-                  <div key={index} className='flex gap-12'>
-                    <div className='flex gap-12'>
-                      {field.map((subField) => (
-                        <FormFieldComponent key={subField.name} {...subField} />
-                      ))}
-                    </div>
-                    <div>
-                      {lastRowIndex.current == index ? (
-                        <Plus onClick={() => addFieldRow(index)} />
-                      ) : (
-                        <Trash2Icon onClick={() => removeFieldRow(index)} />
-                      )}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <FormFieldComponent key={field.name} {...field} />
-              )
-            )}
 
-            <FormSubmitBtn isSubmitting={isSubmitting} />
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <FormSubmitBtn isSubmitting={isSubmitting} />
+      </form>
+    </Form>
   );
 };
 

@@ -1,10 +1,11 @@
-import { TimeTables } from "@/components/app-ui/admin/timetable/TimeTables";
-import React from "react";
+import AddTimeTable from '@/components/app-ui/admin/timetable/AddTimeTable';
+import { TimeTables } from '@/components/app-ui/admin/timetable/TimeTables';
+import React from 'react';
 
 const page = () => {
   return (
-    <div className="px-10 flex justify-center">
-      <TimeTables />
+    <div className='flex justify-center'>
+      <AddTimeTable />
     </div>
   );
 };
